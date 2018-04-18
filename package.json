@@ -4,13 +4,17 @@
   "description": "Basiclly, this project aim to build a blockchain from scratch. Things covered are shown below: 1. Create the core blockchain 2. build APIs around the blockchain 3. Create a dynamic peer-to-peer server for multiple contributors 4. Implement a proof-of-work system to balance users.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watchAll",
     "dev-test": "nodemon dev-test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jest": "^22.4.3",
     "nodemon": "^1.17.3"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
   }
 }

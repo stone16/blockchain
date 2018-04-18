@@ -4,8 +4,6 @@
 // Add script in package.json file and use command `npm run dev-test`
 const Block = require('./block');
 
-const block = new Block('123789325','lastHash','hash','foo data');
+const fooBlock = Block.mineBlock(Block.genesis(), 'foo');
 
-console.log(block.toString());
-console.log(Block.genesis().toString());
-
+console.log(fooBlock.toString());

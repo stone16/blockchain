@@ -28,3 +28,13 @@ Install nodemon, which offers a live development environment
 
     npm i nodemon --save-dev
 
+Install the cryto-js package for the hash algorithm implementation SHA-256
+
+    npm i crypto-js --save
+
+Build the test environment for the project
+
+    npm i jest --save-dev
+
+
+
