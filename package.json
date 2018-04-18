@@ -1,0 +1,16 @@
+{
+  "name": "llc-chain",
+  "version": "1.0.0",
+  "description": "Basiclly, this project aim to build a blockchain from scratch. Things covered are shown below: 1. Create the core blockchain 2. build APIs around the blockchain 3. Create a dynamic peer-to-peer server for multiple contributors 4. Implement a proof-of-work system to balance users.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-test": "nodemon dev-test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
