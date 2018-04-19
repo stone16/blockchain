@@ -6,7 +6,7 @@ import java.security.*;
 import java.util.Base64;
 import java.util.UUID;
 
-public class BlockChainUtil {
+public class BlockChainUtils {
     /**
      * Returns a hexadecimal encoded SHA-256 hash for the input String.
      * @param data
@@ -32,12 +32,12 @@ public class BlockChainUtil {
     }
 
     /**
-     * Using privateKey and input data to generate ECDSA signature
+     * Using privateKey and input data to generate ECDSA signature using Elliptic Curve algorithm
      * @param privateKey
      * @param data
      * @return realSig
      */
-    public static byte[] applyECDSASignature(PrivateKey privateKey, String data) {
+    public static byte[] applySignature(PrivateKey privateKey, String data) {
         Signature signature;
         byte[] realSig;
         try {
@@ -59,7 +59,7 @@ public class BlockChainUtil {
      * @param signature
      * @return boolean
      */
-    public static boolean verifyECDSASig(PublicKey publicKey, String data, byte[] signature) {
+    public static boolean verifySignature(PublicKey publicKey, String data, byte[] signature) {
         try {
             Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
             ecdsaVerify.initVerify(publicKey);
@@ -76,6 +76,7 @@ public class BlockChainUtil {
      * @return String
      */
     public static String getStringFromKey(Key key) {
+
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 }
