@@ -57,5 +57,17 @@ Miners may want to add some blocks to the blockchain at the same time. There are
 
 ## P2P networking
 
-To truly support multiple miners to run this blockchain application together. Use websocket to do so.  
-The first app wiil start the peer to peer server, and the laters will connect to the original one. 
+To truly support multiple miners to run this blockchain application together. Use websocket to do so. The first app wiil start the peer to peer server, and the laters will connect to the original one. 
+
+    npm run dev
+    HTTP_PORT=3002 P2P_PORT=5002 PEERS=ws://localhost:5001 npm run dev
+
+Use this two commands to imitate p2p. 
+
+## Proof of work
+A system requiring miners to do computational work to add blocks. Cause any peer have the ability to replace the blockchain with their own. Proof of work make it unproductive to tamper data and make the broadcast. 
+
+### The system: Hashcash
+Have a limit for the hash value, like the value need to have several leading zeros, or we need to do the rehash. It controls the time needed to generate a new block. For to generate a new hash value, we import `nonce`, which will increase itself by one per rotation. Also we need to set the difficulty of mining, thus the generation time of a new block can be consistent.
+
+Import a new variable `Mine rate`, the mechanism works in this way: compute the time consumed for generating a new block, if it's less than mine rate, difficulty ++; otherwise, difficulty --. 
