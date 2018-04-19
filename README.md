@@ -43,6 +43,10 @@ To make some APIs, and communicate with HTTP request, we need a module named `ex
 Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
 
     npm i body-parser --save
+
+Support the p2p server, need to use `websocket` package
+
+    npm i ws --save
 # Some Explanations
 
 ## multi-miners
@@ -53,3 +57,5 @@ Miners may want to add some blocks to the blockchain at the same time. There are
 
 ## P2P networking
 
+To truly support multiple miners to run this blockchain application together. Use websocket to do so.  
+The first app wiil start the peer to peer server, and the laters will connect to the original one. 

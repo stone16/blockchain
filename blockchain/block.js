@@ -15,7 +15,7 @@ class Block {
     // use subString() function merely cause we do not need a long hash value
     toString() {
         return  `Block -
-            Timestamp: ${this.timeStamp}
+            Timestamp: ${this.timestamp}
             LastHash : ${this.lastHash.substring(0,10)}
             Hash     : ${this.hash.substring(0,10)}
             data     : ${this.data}`;
