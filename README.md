@@ -19,7 +19,7 @@ Changable difficulty can adjust to control the rate of new bl;ocks coming in.
 Store the private and public key of an individual
 Public key is the address of the wallet. 
 
-# Basic operations
+# Make it run
 create package.json file
 
     npm init -y
@@ -36,5 +36,20 @@ Build the test environment for the project
 
     npm i jest --save-dev
 
+To make some APIs, and communicate with HTTP request, we need a module named `express`
 
+    npm i express --save
+
+Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
+
+    npm i body-parser --save
+# Some Explanations
+
+## multi-miners
+Miners may want to add some blocks to the blockchain at the same time. There are 2 mechanisms to make the judgement.
+
+1. Choose the longest one
+2. Check if the data has been changed/tampered
+
+## P2P networking
 
