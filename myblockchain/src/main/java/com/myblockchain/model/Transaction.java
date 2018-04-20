@@ -3,6 +3,7 @@ package com.myblockchain.model;
 import com.myblockchain.utils.BlockChainUtils;
 import com.myblockchain.services.wallet.Wallet;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @Data
+@NoArgsConstructor
 public class Transaction {
     private String transactionId;
     private PublicKey sender;
@@ -20,8 +22,8 @@ public class Transaction {
     private ArrayList<TransactionInput> inputs;
     private ArrayList<TransactionOutput> outputs;
 
-    public Transaction() {
-        this.transactionId = BlockChainUtils.generateTransactionId();
+    public Transaction(String transactionId) {
+        this.transactionId = transactionId;
     }
 
     public Transaction(Wallet senderWallet, PublicKey recipient,

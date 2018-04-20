@@ -1,8 +1,15 @@
 package com.myblockchain.services.network;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myblockchain.model.Block;
 import com.myblockchain.model.Msg;
+import com.myblockchain.model.Transaction;
+import com.myblockchain.model.TransactionPool;
+import com.myblockchain.services.blockchain.BlockChain;
 import lombok.Data;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
@@ -19,10 +26,15 @@ public class P2pServer implements Runnable {
     private ServerSocket ss;
     private boolean run;
 
+    private TransactionPool pool;
+    private BlockChain blockchain;
+
     public P2pServer() {}
 
-    public P2pServer(int port) {
+    public P2pServer(int port, BlockChain blockchain, TransactionPool pool) {
         this.port = port;
+        this.blockchain = blockchain;
+        this.pool = pool;
     }
 
     /**
@@ -101,7 +113,51 @@ public class P2pServer implements Runnable {
         } catch (IOException e) {
             // e.printStackTrace();
         }
+    }
 
+    /**
+     * Broadcast the updated blockchain to peers
+     */
+    public void broadcastChains(List<Block> chain) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(out, chain);
+            broadcastMsg(new Msg("chain", new String(out.toByteArray())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Broadcast the latest transaction to peers
+     */
+    public void broadcastTransaction(Transaction t) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            broadcastMsg(new Msg("transaction", mapper.writeValueAsString(t)));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Broadcast to clear the transaction pool to peers
+     */
+    public void broadcastClearTransaction() {
+        broadcastMsg(new Msg("clear", ""));
+    }
+
+    private synchronized void broadcastMsg(Msg msg) {
+        clients.forEach((peerIp, client) -> {
+            try {
+                client.sendMsg(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -142,7 +198,7 @@ public class P2pServer implements Runnable {
                     return;
                 }
                 Socket s = ss.accept();
-                Connection c = new Connection(s, ss);
+                Connection c = new Connection(s, ss, pool, blockchain);
                 connections.add(c);
                 //TODO: check connections status
             }

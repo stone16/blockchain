@@ -19,7 +19,6 @@ public class Block {
     private ArrayList<Transaction> transactions; //Transactions
     //private String merkleTree;
 
-
     public Block(long timeStamp, String lastHash, String hash, long nonce,
                  int difficulty, ArrayList<Transaction> transactions) {
         this.timeStamp = timeStamp;

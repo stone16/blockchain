@@ -1,12 +1,18 @@
 package com.myblockchain.services.network;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.myblockchain.model.Block;
 import com.myblockchain.model.Msg;
+import com.myblockchain.model.Transaction;
+import com.myblockchain.model.TransactionPool;
+import com.myblockchain.services.blockchain.BlockChain;
 import lombok.Data;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 @Data
 public class Connection implements Runnable {
@@ -15,10 +21,14 @@ public class Connection implements Runnable {
     private ServerSocket ss;
     private BufferedReader in;
     private BufferedWriter out;
+    private TransactionPool pool;
+    private BlockChain blockchain;
 
-    public Connection (Socket s, ServerSocket ss) {
+    public Connection (Socket s, ServerSocket ss, TransactionPool pool, BlockChain blockchain) {
         this.s = s;
         this.ss = ss;
+        this.pool = pool;
+        this.blockchain = blockchain;
         try {
             in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
@@ -42,11 +52,13 @@ public class Connection implements Runnable {
             ObjectMapper om = new ObjectMapper();
             Msg msg = om.readValue(s, Msg.class);
             if (msg.type.equals("chain")) {
-                System.out.println("Receive chain");
+                TypeFactory tf = om.getTypeFactory();
+                List<Block> newChain = om.readValue(msg.body, tf.constructCollectionType(List.class, Block.class));
+                blockchain.replaceChain(newChain);
             } else if (msg.type.equals("transaction")) {
-                System.out.println("Receive transaction");
-            } else if (msg.type.equals("clear_transactions")) {
-
+                pool.updateOrAddTransaction(om.readValue(msg.body, Transaction.class));
+            } else if (msg.type.equals("clear")) {
+                pool.clear();
             } else if (msg.type.equals("Registration")) {
                 P2pServer.Pair(msg.body);
             }
