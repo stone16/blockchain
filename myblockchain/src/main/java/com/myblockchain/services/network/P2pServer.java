@@ -12,6 +12,7 @@ import lombok.Data;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class P2pServer implements Runnable {
 
             String localIp = InetAddress.getLocalHost().getHostAddress();
             client.sendMsg(new Msg("Registration", localIp));
+
         } catch (IOException e) {
 
         }
@@ -146,8 +148,15 @@ public class P2pServer implements Runnable {
     /**
      * Broadcast to clear the transaction pool to peers
      */
-    public void broadcastClearTransaction() {
-        broadcastMsg(new Msg("clear", ""));
+    public void broadcastClearTransaction(ArrayList<Transaction> validTransactions) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(out, validTransactions);
+            broadcastMsg(new Msg("clear", new String(out.toByteArray())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private synchronized void broadcastMsg(Msg msg) {

@@ -58,7 +58,9 @@ public class Connection implements Runnable {
             } else if (msg.type.equals("transaction")) {
                 pool.updateOrAddTransaction(om.readValue(msg.body, Transaction.class));
             } else if (msg.type.equals("clear")) {
-                pool.clear();
+                TypeFactory tf = om.getTypeFactory();
+                List<Transaction> validTransaction = om.readValue(msg.body, tf.constructCollectionType(List.class, Transaction.class));
+                pool.updateTransactionPool(validTransaction);
             } else if (msg.type.equals("Registration")) {
                 P2pServer.Pair(msg.body);
             }

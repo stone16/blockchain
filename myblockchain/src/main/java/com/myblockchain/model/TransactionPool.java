@@ -4,10 +4,7 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
@@ -71,5 +68,16 @@ public class TransactionPool {
             e.printStackTrace();
         }
         return res;
+    }
+
+    /** Remove transactions that have been proved in minned block in transactions pool.
+     * @param validTransactions
+     */
+    public void updateTransactionPool(List<Transaction> validTransactions) {
+        for(Transaction transaction : validTransactions) {
+            if(this.transactions.containsKey(transaction.getTransactionId())) {
+                this.transactions.remove(transaction.getTransactionId());
+            }
+        }
     }
 }
