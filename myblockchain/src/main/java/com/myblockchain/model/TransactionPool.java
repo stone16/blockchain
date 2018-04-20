@@ -1,9 +1,11 @@
 package com.myblockchain.model;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -56,11 +58,13 @@ public class TransactionPool {
         ArrayList<Transaction> res = new ArrayList<>(num);
         int i = 0;
         try {
-            for (Map.Entry<String, Transaction> entry : transactions.entrySet()) {
+            Iterator<Map.Entry<String, Transaction>> itr = transactions.entrySet().iterator();
+            while(itr.hasNext()) {
+                Map.Entry<String, Transaction> entry = itr.next();
                 Transaction cur = entry.getValue();
-                if (i < num && cur.verifyTransaction() && (cur.getInputsSum() == cur.getOutputsSum())) {
+                if (i < num && cur.verifyTransaction()) {
                     res.add(cur);
-                    transactions.remove(cur);
+                    itr.remove();
                 }
             }
         } catch (Exception e) {

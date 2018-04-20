@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.security.PublicKey;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -97,6 +98,23 @@ public class BlockChain {
     }
 
     /**
+     * Return a wallet's UTXOs
+     * @param walletAddress
+     * @return Map
+     */
+    public Map<String, TransactionOutput> findWalletUTXOs(PublicKey walletAddress) {
+        Map<String, TransactionOutput> allUTXOs = this.findAllUTXOs();
+        Map<String, TransactionOutput> walletUTXOs = new HashMap<>();
+
+        for(TransactionOutput txOutput : allUTXOs.values()) {
+            if(txOutput.getRecipient().equals(walletAddress)) {
+                walletUTXOs.put(txOutput.getId(), txOutput);
+            }
+        }
+        return walletUTXOs;
+    }
+
+    /**
      * Update a user's wallet's UTXOs
      * @param wallet
      * @param allUTXOs
@@ -126,16 +144,33 @@ public class BlockChain {
     }
 
     /**
+     * Get all transactions contained in block chain
+     * @return
+     */
+    public List<Transaction> getAllTransactions() {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        for(Block block : this.getChain()) {
+            transactions.addAll(block.getTransactions());
+        }
+        return transactions;
+    }
+
+    /**
      * Add a new mined block into block chain
      * @param transactions
      * @return Block
      */
-    public Block addBlock(ArrayList<Transaction> transactions) {
+    public Block addBlock(List<Transaction> transactions) {
         Block block = Block.mineBlock(chain.get(chain.size() - 1), transactions);
         chain.add(block);
         return block;
     }
 
+    /**
+     * Validate all blocks in this block chain
+     * @param bc
+     * @return
+     */
     public boolean isValidChain(List<Block> bc) {
         if (!bc.get(0).toString().equals(Block.genesis().toString())) {
             return false;
@@ -144,7 +179,7 @@ public class BlockChain {
             Block curtBlock = bc.get(i);
             Block prevBlock = bc.get(i - 1);
             String curtHash = Block.calculateHash(curtBlock.getTimeStamp(), curtBlock.getLastHash(), curtBlock.getDifficulty(),
-                    curtBlock.getNonce(), curtBlock.getTransactions());
+                    curtBlock.getNonce(), curtBlock.getMerkleRoot());
             if (!curtBlock.getLastHash().equals(prevBlock.getHash()) || !curtBlock.getHash().equals(curtHash)) {
                 return false;
             }
@@ -152,6 +187,10 @@ public class BlockChain {
         return true;
     }
 
+    /**
+     * replace current chain with new chain
+     * @param newChain
+     */
     public void replaceChain(List<Block> newChain) {
         if (newChain.size() < chain.size()) {
             return;
@@ -161,6 +200,13 @@ public class BlockChain {
         chain = newChain;
     }
 
+    /**
+     * Get the last block
+     * @return Block
+     */
+    public Block getLastBlock() {
+        return this.chain.get(chain.size() - 1);
+    }
 
 }
 

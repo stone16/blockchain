@@ -32,6 +32,11 @@ public class BlockTest {
     }
 
     @Test
+    public void getMerkleRoot() throws Exception {
+
+    }
+
+    @Test
     public void mineBlock() throws Exception {
         //Get genesis block
         Block lastBlock = blockChain.getChain().get(0);

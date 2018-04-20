@@ -10,5 +10,6 @@ public class TransactionInput {
 
     public TransactionInput(TransactionOutput UTXO) {
         this.UTXO = UTXO;
+        this.transactionOutputId = UTXO.getId();
     }
 }
