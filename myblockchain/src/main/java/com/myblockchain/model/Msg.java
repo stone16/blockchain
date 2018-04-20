@@ -1,12 +1,12 @@
 package com.myblockchain.model;
 
-public class Data {
+public class Msg {
     public String type;
     public String body;
 
-    public Data() {}
+    public Msg() {}
 
-    public Data(String type, String body) {
+    public Msg(String type, String body) {
         this.type = type;
         this.body = body;
     }

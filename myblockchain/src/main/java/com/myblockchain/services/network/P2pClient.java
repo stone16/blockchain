@@ -1,13 +1,16 @@
 package com.myblockchain.services.network;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myblockchain.model.Data;
+import com.myblockchain.model.Msg;
+import lombok.Data;
 
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+@Data
 public class P2pClient implements Runnable {
+
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
@@ -20,6 +23,9 @@ public class P2pClient implements Runnable {
         this.port = port;
     }
 
+    /**
+     * Connect to remote P2P server
+     */
     private void connect() {
         try {
             socket = new Socket();
@@ -31,6 +37,9 @@ public class P2pClient implements Runnable {
         }
     }
 
+    /**
+     * Disconnect to the remote P2P server
+     */
     private void close() {
         try {
             out.close();
@@ -41,13 +50,21 @@ public class P2pClient implements Runnable {
         }
     }
 
-    public void sendMsg(Data d) throws IOException {
+    /**
+     * Send message to the remote P2P server
+     * @param d
+     * @throws IOException
+     */
+    public void sendMsg(Msg d) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         msg = mapper.writeValueAsString(d);
         Thread t = new Thread(this);
         t.start();
     }
 
+    /**
+     * Thread entrance
+     */
     public synchronized void run() {
         connect();
         try {

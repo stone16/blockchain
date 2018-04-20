@@ -1,12 +1,14 @@
 package com.myblockchain.services.network;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myblockchain.model.Data;
+import com.myblockchain.model.Msg;
+import lombok.Data;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+@Data
 public class Connection implements Runnable {
 
     private Socket s;
@@ -31,18 +33,22 @@ public class Connection implements Runnable {
         thread.start();
     }
 
+    /**
+     * Handle incoming message
+     * @param s incoming json string
+     */
     private void msgHandler(String s) {
         try {
             ObjectMapper om = new ObjectMapper();
-            Data data = om.readValue(s, Data.class);
-            if (data.type.equals("chain")) {
+            Msg msg = om.readValue(s, Msg.class);
+            if (msg.type.equals("chain")) {
                 System.out.println("Receive chain");
-            } else if (data.type.equals("transaction")) {
+            } else if (msg.type.equals("transaction")) {
                 System.out.println("Receive transaction");
-            } else if (data.type.equals("clear_transactions")) {
+            } else if (msg.type.equals("clear_transactions")) {
 
-            } else if (data.type.equals("Registration")) {
-                P2pServer.Pair(data.body);
+            } else if (msg.type.equals("Registration")) {
+                P2pServer.Pair(msg.body);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,6 +56,9 @@ public class Connection implements Runnable {
 
     }
 
+    /**
+     * Thread entrance, read the json message from TCP connection
+     */
     public synchronized void run() {
         try {
             StringBuilder sb = new StringBuilder();

@@ -1,6 +1,7 @@
 package com.myblockchain.services.network;
 
-import com.myblockchain.model.Data;
+import com.myblockchain.model.Msg;
+import lombok.Data;
 
 import java.io.IOException;
 import java.net.*;
@@ -8,17 +9,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+@Data
 public class P2pServer implements Runnable {
 
     static HashMap<String, P2pClient> clients = new HashMap<>();
-    //Hard code
+    private List<Connection> connections = new LinkedList<>();
+    private String ip;
     private int port = 8888;
-
     private ServerSocket ss;
     private boolean run;
-    private List<Connection> connections = new LinkedList<>();
-
-    private String ip;
 
     public P2pServer() {}
 
@@ -26,23 +25,29 @@ public class P2pServer implements Runnable {
         this.port = port;
     }
 
+    /**
+     * Pairing with the the new P2P server
+     * @param peerIp
+     */
     public static void Pair(String peerIp) {
         try {
             if (clients.containsKey(peerIp)) {
                 return;
             }
-            // Hard code
             System.out.println(peerIp);
             P2pClient client = new P2pClient(peerIp, 8888);
             clients.put(peerIp, client);
 
             String localIp = InetAddress.getLocalHost().getHostAddress();
-            client.sendMsg(new Data("Registration", localIp));
+            client.sendMsg(new Msg("Registration", localIp));
         } catch (IOException e) {
 
         }
     }
 
+    /**
+     * Broadcast the pair request to all subnet ip address
+     */
     private void findPeer() {
         try {
             String broadcastAddr = "";
@@ -58,7 +63,7 @@ public class P2pServer implements Runnable {
                     broadcastAddr = interfaceAddress.getBroadcast().getHostAddress();
                 }
             }
-            Data d = new Data("Registration", ip);
+            Msg d = new Msg("Registration", ip);
             String[] part = broadcastAddr.trim().split("\\.");
             for (int i = 0; i < 255; i++) {
                 for (int j = 0; j < 255; j++) {
@@ -99,7 +104,9 @@ public class P2pServer implements Runnable {
 
     }
 
-
+    /**
+     * Starting the P2P server
+     */
     public void init() {
         try {
             ss = new ServerSocket(port);
@@ -113,6 +120,9 @@ public class P2pServer implements Runnable {
         findPeer();
     }
 
+    /**
+     * Stoping the P2P server
+     */
     public void close() {
         run = false;
         try {
@@ -122,6 +132,9 @@ public class P2pServer implements Runnable {
         }
     }
 
+    /**
+     * Thread entrance
+     */
     public void run() {
         try {
             while (run) {
