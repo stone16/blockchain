@@ -107,3 +107,7 @@ How much currency the sender is giving to other wallets
 #### Unique ID
 To identify the transaction object 
 
+#### Transaction Pool
+constains all new transactions submitted by individuals.Those new transactions are seen as unconfirmed because they have not been officially included within the block chain. And miners will do the job of creating blocks that confirm transactions, and include them as data for a new block in the blockchain. 
+
+Transaction Pool is located locally, same like blockchain infomation. Thus we need to use p2pServer to do the sychronization. 
