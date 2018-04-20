@@ -5,6 +5,7 @@ import com.myblockchain.model.*;
 import com.myblockchain.services.blockchain.BlockChain;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
@@ -17,6 +18,7 @@ import java.util.Map;
  * Wallet contains two fields: PublicKey and PrivateKey
  */
 @Data
+@Component
 public class Wallet {
     private PrivateKey privateKey;
     private PublicKey publicKey;
@@ -33,6 +35,7 @@ public class Wallet {
     public Wallet() {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         genKeyPair();
+        this.UTXOs = new HashMap<>();
     }
 
     /**
@@ -40,25 +43,33 @@ public class Wallet {
      * @return float
      */
     public float getBalance() {
-        float balance[] = {0};
-        ArrayList<Transaction> transactions = new ArrayList<>();
-        for(Block block : blockChain.getChain()) {
-            block.getTransactions().forEach(transaction -> transactions.add(transaction));
+        float balance = 0;
+        if(this.getUTXOs().isEmpty()) return balance;
+        for(TransactionOutput txOutput : this.getUTXOs().values()) {
+            balance += txOutput.getAmount();
         }
+        return balance;
+    }
 
-        ArrayList<Transaction> walletOutputTs = new ArrayList<>();
-        transactions.forEach(transaction -> {
-            transaction.getOutputs().forEach(transactionOutput -> {
-                if(transactionOutput.getRecipient() == this.publicKey) {
-                   UTXOs.put(transactionOutput.getId(), transactionOutput);
-                   balance[0] += transactionOutput.getAmount();
-                   walletOutputTs.add(transaction);
+    /**
+     * Update UTXOs from whole block chain
+     */
+    public void updateUTXOsFromWholeBlockChain(BlockChain blockChain) {
+        this.setUTXOs(blockChain.findWalletUTXOs(this.getPublicKey()));
+    }
+
+    /**
+     * Update UTXOs from a minned block
+     * @param minnedBlock
+     */
+    public void updateUTXOsFromMinnedBlock(Block minnedBlock) {
+        for(Transaction tx : minnedBlock.getTransactions()) {
+            for(TransactionOutput txOutput : tx.getOutputs()) {
+                if(txOutput.getRecipient().equals(this.getPublicKey())) {
+                    this.UTXOs.put(txOutput.getId(), txOutput);
                 }
-            });
-        });
-
-        return balance[0];
-
+            }
+        }
     }
 
     /**
@@ -67,8 +78,9 @@ public class Wallet {
     @Override
     public String toString() {
         return "Wallet -" +
-                "\n publicKey: " + publicKey.toString() +
-                "\n privateKey: " + privateKey.toString();
+                "\n publicKey: " + String.valueOf(this.getPublicKey()) +
+                "\n privateKey: " + String.valueOf(this.getPrivateKey()) +
+                "\n UTXOs: " + String.valueOf(this.getUTXOs()) + "\n";
     }
 
     /**

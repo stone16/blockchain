@@ -3,13 +3,16 @@ package com.myblockchain.model;
 import com.myblockchain.utils.BlockChainUtils;
 import com.myblockchain.services.wallet.Wallet;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Data
+@Component
 public class Transaction {
     private String transactionId;
     private PublicKey sender;
@@ -31,6 +34,7 @@ public class Transaction {
         this.sender = senderWallet.getPublicKey();
         this.amount = amount;
         this.inputs = inputs;
+        this.outputs = new ArrayList<>();
     }
 
 
@@ -64,12 +68,18 @@ public class Transaction {
         ArrayList<TransactionInput> newInputs = new ArrayList<>();
         for(TransactionOutput UTXO : senderWallet.getUTXOs().values()) {
             total += UTXO.getAmount();
+            TransactionInput newInput = new TransactionInput(UTXO);
+            newInputs.add(newInput);
             if(total < amount) {
-                TransactionInput newInput = new TransactionInput(UTXO);
-                newInputs.add(newInput);
+                continue;
             } else {
                 break;
             }
+        }
+        // Throw exception if balance is not enough
+        if(total < amount) {
+            throw new RuntimeException("Balance is not enough. Balance is: " + total +
+                    ", Amount is: " + amount);
         }
 
         //Generate transaction outputs:
@@ -83,6 +93,9 @@ public class Transaction {
 
         //Sign the transaction with signature
         transaction.signTransaction(senderWallet.getPrivateKey());
+
+        //Update sender wallet's UTXOs pool
+        newInputs.forEach(transactionInput -> senderWallet.getUTXOs().remove(transactionInput.getTransactionOutputId()));
 
         return transaction;
     }
@@ -101,14 +114,15 @@ public class Transaction {
     }
 
     /**
-     * Verify transaction with signature and own publicKey
+     * Verify transaction with signature and own publicKey, verify input and output
      * @return boolean
      */
     public boolean verifyTransaction() {
         String data = BlockChainUtils.getStringFromKey(sender) +
                 BlockChainUtils.getStringFromKey(recipient) +
                 outputs.toString();
-        return BlockChainUtils.verifySignature(sender, data, signature);
+        return BlockChainUtils.verifySignature(sender, data, signature) &&
+                ((this.getInputs() == null) || (this.getInputsSum() == this.getOutputsSum()));
     }
 
     /**
@@ -157,6 +171,7 @@ public class Transaction {
         }
         return sum;
     }
+
 
     @Override
     public String toString() {
