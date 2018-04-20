@@ -7,6 +7,7 @@ import com.myblockchain.model.Msg;
 import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
+import com.myblockchain.utils.Configuration;
 import lombok.Data;
 
 import java.io.*;
@@ -51,17 +52,17 @@ public class Connection implements Runnable {
         try {
             ObjectMapper om = new ObjectMapper();
             Msg msg = om.readValue(s, Msg.class);
-            if (msg.type.equals("chain")) {
+            if (msg.type.equals(Configuration.MessageType.CHAIN)) {
                 TypeFactory tf = om.getTypeFactory();
                 List<Block> newChain = om.readValue(msg.body, tf.constructCollectionType(List.class, Block.class));
                 blockchain.replaceChain(newChain);
-            } else if (msg.type.equals("transaction")) {
+            } else if (msg.type.equals(Configuration.MessageType.TRANSACTION)) {
                 pool.updateOrAddTransaction(om.readValue(msg.body, Transaction.class));
-            } else if (msg.type.equals("clear")) {
+            } else if (msg.type.equals(Configuration.MessageType.CLEAR)) {
                 TypeFactory tf = om.getTypeFactory();
                 List<Transaction> validTransaction = om.readValue(msg.body, tf.constructCollectionType(List.class, Transaction.class));
                 pool.updateTransactionPool(validTransaction);
-            } else if (msg.type.equals("Registration")) {
+            } else if (msg.type.equals(Configuration.MessageType.REGISTRATION)) {
                 P2pServer.Pair(msg.body);
             }
         } catch (IOException e) {

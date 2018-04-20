@@ -2,6 +2,7 @@ package com.myblockchain.model;
 
 
 import com.myblockchain.utils.BlockChainUtils;
+import com.myblockchain.utils.Configuration;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -43,7 +44,7 @@ public class Block {
     public static Block genesis() {
         long timeStamp = new Date().getTime();
         String lastHash = "";
-        int difficulty = 3;
+        int difficulty = Configuration.DIFFICULTY;
         long nonce = 0;
         ArrayList<Transaction> transactions = new ArrayList<>();
         String merkleRoot = "";
@@ -83,7 +84,7 @@ public class Block {
     //TODO: Fix the hardcoded mine rate
     public static int adjustDifficulty(Block lastBlock, long currentTime) {
         int difficulty = lastBlock.getDifficulty();
-        difficulty = lastBlock.getTimeStamp() + 1000 > currentTime ? ++difficulty : --difficulty;
+        difficulty = lastBlock.getTimeStamp() + Configuration.MINE_RATE > currentTime ? ++difficulty : --difficulty;
         return difficulty;
     }
 

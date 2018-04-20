@@ -7,6 +7,7 @@ import com.myblockchain.model.Msg;
 import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
+import com.myblockchain.utils.Configuration;
 import lombok.Data;
 
 import java.io.ByteArrayOutputStream;
@@ -23,7 +24,7 @@ public class P2pServer implements Runnable {
     static HashMap<String, P2pClient> clients = new HashMap<>();
     private List<Connection> connections = new LinkedList<>();
     private String ip;
-    private int port = 8888;
+    private int port = Configuration.P2PConfig.P2P_PORT;
     private ServerSocket ss;
     private boolean run;
 
@@ -48,11 +49,11 @@ public class P2pServer implements Runnable {
                 return;
             }
             System.out.println(peerIp);
-            P2pClient client = new P2pClient(peerIp, 8888);
+            P2pClient client = new P2pClient(peerIp);
             clients.put(peerIp, client);
 
             String localIp = InetAddress.getLocalHost().getHostAddress();
-            client.sendMsg(new Msg("Registration", localIp));
+            client.sendMsg(new Msg(Configuration.MessageType.REGISTRATION, localIp));
 
         } catch (IOException e) {
 
@@ -77,7 +78,7 @@ public class P2pServer implements Runnable {
                     broadcastAddr = interfaceAddress.getBroadcast().getHostAddress();
                 }
             }
-            Msg d = new Msg("Registration", ip);
+            Msg d = new Msg(Configuration.MessageType.REGISTRATION, ip);
             String[] part = broadcastAddr.trim().split("\\.");
             for (int i = 0; i < 255; i++) {
                 for (int j = 0; j < 255; j++) {
@@ -93,7 +94,7 @@ public class P2pServer implements Runnable {
                                 continue;
                             }
                             // System.out.println(receiver);
-                            P2pClient s = new P2pClient(receiver, port);
+                            P2pClient s = new P2pClient(receiver);
                             s.sendMsg(d);
                             if (!part[3].equals("255")) {
                                 break;
@@ -125,7 +126,7 @@ public class P2pServer implements Runnable {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(out, chain);
-            broadcastMsg(new Msg("chain", new String(out.toByteArray())));
+            broadcastMsg(new Msg(Configuration.MessageType.CHAIN, new String(out.toByteArray())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -138,7 +139,7 @@ public class P2pServer implements Runnable {
     public void broadcastTransaction(Transaction t) {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            broadcastMsg(new Msg("transaction", mapper.writeValueAsString(t)));
+            broadcastMsg(new Msg(Configuration.MessageType.TRANSACTION, mapper.writeValueAsString(t)));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -153,7 +154,7 @@ public class P2pServer implements Runnable {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(out, validTransactions);
-            broadcastMsg(new Msg("clear", new String(out.toByteArray())));
+            broadcastMsg(new Msg(Configuration.MessageType.CLEAR, new String(out.toByteArray())));
         } catch (IOException e) {
             e.printStackTrace();
         }

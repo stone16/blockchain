@@ -2,6 +2,7 @@ package com.myblockchain.services.network;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myblockchain.model.Msg;
+import com.myblockchain.utils.Configuration;
 import lombok.Data;
 
 import java.io.*;
@@ -15,12 +16,11 @@ public class P2pClient implements Runnable {
     private BufferedReader in;
     private BufferedWriter out;
     private String host;
-    private int port;
+    private int port = Configuration.P2PConfig.P2P_PORT;
     private String msg;
 
-    public P2pClient(String host, int port) {
+    public P2pClient(String host) {
         this.host = host;
-        this.port = port;
     }
 
     /**
@@ -29,7 +29,7 @@ public class P2pClient implements Runnable {
     private void connect() {
         try {
             socket = new Socket();
-            socket.connect(new InetSocketAddress(host, port), 1000);
+            socket.connect(new InetSocketAddress(host, port), Configuration.P2PConfig.SOCKET_TIMEOUT);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {

@@ -6,6 +6,7 @@ import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.network.P2pServer;
 import com.myblockchain.services.wallet.Wallet;
+import com.myblockchain.utils.Configuration;
 
 import java.util.ArrayList;
 
@@ -24,15 +25,22 @@ public class Miner implements Runnable {
         this.p2p = p2p;
     }
 
+    /**
+     * Miner try to mine block
+     * @return
+     */
     public Block mine() {
         Thread thread = new Thread(this);
         thread.start();
         return latestBlock;
     }
 
+    /**
+     * Mining thread entrance, and broadcast the result after mining
+     */
     public synchronized void run() {
-        ArrayList<Transaction> validTransaction = pool.getTransactionList(5);
-        validTransaction.add(Transaction.rewardMinner(wallet, 50));
+        ArrayList<Transaction> validTransaction = pool.getTransactionList(Configuration.TRANSACTION_NUM);
+        validTransaction.add(Transaction.rewardMinner(wallet, Configuration.MINING_REWARD));
         latestBlock = blockchain.addBlock(validTransaction);
         p2p.broadcastChains(blockchain.getChain());
         pool.updateTransactionPool(validTransaction);
