@@ -22,7 +22,6 @@ public class Block {
     private List<Transaction> transactions; //Transactions
     private String merkleRoot;
 
-
     public Block(long timeStamp, String lastHash, String hash, long nonce,
                  int difficulty, List<Transaction> transactions, String merkleRoot) {
         this.timeStamp = timeStamp;
