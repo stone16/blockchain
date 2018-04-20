@@ -111,3 +111,16 @@ To identify the transaction object
 constains all new transactions submitted by individuals.Those new transactions are seen as unconfirmed because they have not been officially included within the block chain. And miners will do the job of creating blocks that confirm transactions, and include them as data for a new block in the blockchain. 
 
 Transaction Pool is located locally, same like blockchain infomation. Thus we need to use p2pServer to do the sychronization. 
+
+**Miners**  will take transactions from transaction pool and store them as data in blockchain. They do the computational work of discovering a block in the blockchain and store transactions into the chain. Transaction go from unconfirmed state to confiremed, from transaction pool to blockchain. 
+
+**Miner reward** 
+That's the incentive for miners to the the computational work. 
+For the reward, basically, it's a transaction, but it has several differences.
+
+1. *Only one output* Only need reward amount
+2. *Blockchain* itself sign the transaction
+
+### Recalculate the balance
+Need to update the balance before each transactions.
+Use all the outputs from the most recent transaction to get rid of double counting. 

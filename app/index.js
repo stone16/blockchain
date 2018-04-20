@@ -5,6 +5,7 @@ const P2pServer = require('./p2p-server');
 const Wallet = require('../wallet');
 // the transactionPool need to be shared by all the nodes
 const TransactionPool = require('../wallet/transaction-pool');
+const Miner = require('./miner');
 // define the port we want to listen to
 // process.env.HTTP_PORT means user can choose their preferred port on command line
 const HTTP_PORT = process.env.HTTP_PORT || 3001;
@@ -15,6 +16,7 @@ const bc = new Blockchain();
 const wallet = new Wallet();
 const tp = new TransactionPool();
 const p2pServer = new P2pServer(bc, tp);
+const miner = new Miner(bc, tp, wallet, p2pServer);
 
 // allow us to receive json with post request 
 app.use(bodyParser.json());
@@ -44,9 +46,15 @@ app.get('/transactions', (req, res) => {
 // create a transaction with user's wallet 
 app.post('/transact', (req, res) => {
     const {recipient, amount } = req.body;
-    const transaction = wallet.createTransaction(recipient, amount, tp);
+    const transaction = wallet.createTransaction(recipient, amount, bc ,tp);
     p2pServer.broadcastTransaction(transaction);
     res.redirect('/transactions');
+});
+
+app.get('/mine-transactions', (req, res) => {
+    const block = miner.mine();
+    console.log(`New block added: ${block.toString()}`);
+    res.redirect('/blocks');
 });
 
 // to expose your own public key
