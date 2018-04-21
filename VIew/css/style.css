@@ -1,0 +1,29 @@
+.nav-personal {
+	background-color: #004A7B;
+	color: #FFFFFF;
+	font-family: 'Russo One', sans-serif,'Passion One', cursive;
+	font-size: 1.5em;
+	padding: 0px 30px 0px 30px;
+}
+
+.navbar-brand {
+	font-size: 2em;
+	color: #FFFFFF;
+}
+
+.nav-item {
+	color: #FFFFFF;
+}
+
+.navbar li {
+	margin:  0px 7px 0px 7px;
+	padding-left: 20px;
+	font-size: 0.8em;
+}
+
+.bg {
+	opacity: 0.96;
+	width: 100%;
+	height: auto;
+	display: block;
+}

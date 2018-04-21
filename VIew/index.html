@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Blockchain</title>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Passion+One|Russo+One" rel="stylesheet">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="js/dataManage.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <nav class="nav-personal navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="#" style="color: #FFFFFF">Blockchain</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background-color: #FFFFFF">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto" ">
+	                    <li class="nav-item active ">
+	                        <a class="nav-link " href="# " style="color: #FFFFFF ">Blocks<span class="sr-only ">(current)</span></a>
+	                    </li>
+	                    <li class="nav-item " >
+	                        <a class="nav-link " href="# " style="color: #FFFFFF ">Wallet</a>
+	                    </li>
+	                    <li class="nav-item " >
+	                        <a class="nav-link " href="# " style="color: #FFFFFF ">Data</a>
+	                    </li>
+	                    <li class="nav-item " >
+	                        <a class="nav-link " href="# " style="color: #FFFFFF ">About</a>
+	                    </li>
+	                </ul>
+	            </div>
+	        </nav>
+	    </div>
+
+	    <div class="container-fluid ">
+	    	<img class="bg " src="img/bg.png " alt="blockchain ">
+			<div class="row ">
+			<div class="col-6 ">
+				<h2>Block</h2>
+	
+	    	<input type="button" id="block" onclick="addFunction1() " value="blockDifficulty">
+		<!-- 	<svg id="visualization1" width="1000" height="500"></svg> -->
+
+
+
+<!-- <script>
+console.log("get in");
+	// set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// parse the date / time
+var parseTime = d3.timeParse("%Y");
+console.log("1");
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+var y = d3.scaleLinear().range([height, 0]);
+
+// define the line
+var valueline = d3.line()
+    .x(function(d) { return x(d.id); })
+    .y(function(d) { return y(d.difficulty); });
+
+  console.log("2");
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+console.log("3");
+
+function draw(data, country) {
+  
+  var data = data[country];
+  
+  // format the data
+  data.forEach(function(d) {
+      d.id = +d.id;
+      d.difficulty = +d.difficulty;
+  });
+  
+  // sort years ascending
+ //  data.sort(function(a, b){
+ //    return a["Date"]-b["Date"];
+	// })
+ 
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.Date; }));
+  y.domain([0, d3.max(data, function(d) {
+	  return d.difficulty; })]);
+  
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", valueline);
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", valueline2);  
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+  }
+// Get the data
+console.log("1");
+d3.json("/data/blockDifficulty.json", function(error, data) {
+  console.log(error);
+  console.log(data[0]);
+  // trigger render
+  draw(data, "xixi");
+});
+
+
+
+</script> -->
+
+
+
+
+			</div>
+				
+			<div class="col-6 ">
+				<h2> Test the image here</h2>
+				
+			</div>
+		</div>
+
+
+
+	    </div>
+	    <script src="https://cdn.bootcss.com/jquery/1.12.3/jquery.min.js "></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	    <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js "></script>
+	</body>
+
+	</html>

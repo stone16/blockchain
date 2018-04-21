@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const Blockchain = require('../blockchain');
 const P2pServer = require('./p2p-server');
 const Wallet = require('../wallet');
+const path = require('path');
 // the transactionPool need to be shared by all the nodes
 const TransactionPool = require('../wallet/transaction-pool');
 const Miner = require('./miner');
@@ -18,12 +19,15 @@ const tp = new TransactionPool();
 const p2pServer = new P2pServer(bc, tp);
 const miner = new Miner(bc, tp, wallet, p2pServer);
 
+app.use(express.static(__dirname + '/View'));
+app.use(express.static(__dirname + '/Script'));
 // allow us to receive json with post request 
 app.use(bodyParser.json());
 
 // return the blocks of current blockchain
 app.get('/blocks',(req, res) => {
-    res.json(bc.chain);
+    res.sendFile(path.join(__dirname + '/../View/index.html'));
+    // res.json(bc.chain);
 });
 
 app.post('/mine', (req, res) => {
