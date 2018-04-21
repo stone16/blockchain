@@ -157,6 +157,9 @@ public class Transaction {
      * @return float
      */
     public float getInputsSum() {
+        if (inputs == null) {
+            return 0;
+        }
         float sum = 0;
         for(TransactionInput ti : inputs) {
             if(ti.getUTXO() == null) continue;

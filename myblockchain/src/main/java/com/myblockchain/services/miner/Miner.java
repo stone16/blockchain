@@ -10,12 +10,11 @@ import com.myblockchain.utils.Configuration;
 
 import java.util.ArrayList;
 
-public class Miner implements Runnable {
+public class Miner {
     private BlockChain blockchain;
     private TransactionPool pool;
     private Wallet wallet;
     private P2pServer p2p;
-    private Block latestBlock;
 
 
     public Miner(BlockChain blockchain, TransactionPool pool, Wallet wallet, P2pServer p2p) {
@@ -30,20 +29,12 @@ public class Miner implements Runnable {
      * @return
      */
     public Block mine() {
-        Thread thread = new Thread(this);
-        thread.start();
-        return latestBlock;
-    }
-
-    /**
-     * Mining thread entrance, and broadcast the result after mining
-     */
-    public synchronized void run() {
         ArrayList<Transaction> validTransaction = pool.getTransactionList(Configuration.TRANSACTION_NUM);
         validTransaction.add(Transaction.rewardMinner(wallet, Configuration.MINING_REWARD));
-        latestBlock = blockchain.addBlock(validTransaction);
+        Block latestBlock = blockchain.addBlock(validTransaction);
         p2p.broadcastChains(blockchain.getChain());
         pool.updateTransactionPool(validTransaction);
         p2p.broadcastClearTransaction(validTransaction);
+        return latestBlock;
     }
 }
