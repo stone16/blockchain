@@ -4,6 +4,7 @@ import com.myblockchain.model.Block;
 import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
+import com.myblockchain.services.miner.Miner;
 import com.myblockchain.services.network.P2pServer;
 import com.myblockchain.services.wallet.Wallet;
 import org.springframework.boot.SpringApplication;
@@ -37,6 +38,11 @@ public class MyblockchainApplication {
 		P2pServer p2pServer = new P2pServer(8888, blockChain, transactionPool);
 		p2pServer.init();
 		return p2pServer;
+	}
+
+	@Bean
+	Miner Miner(BlockChain blockChain, TransactionPool transactionPool, Wallet wallet, P2pServer p2pServer) {
+		return new Miner(blockChain, transactionPool, wallet, p2pServer);
 	}
 }
 

@@ -1,8 +1,5 @@
 package com.myblockchain.utils;
 
-
-
-
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.ECPointUtil;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;

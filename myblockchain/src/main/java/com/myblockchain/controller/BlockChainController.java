@@ -4,6 +4,7 @@ import com.myblockchain.model.Block;
 import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionOutput;
 import com.myblockchain.services.blockchain.BlockChain;
+import com.myblockchain.services.miner.Miner;
 import com.myblockchain.services.network.P2pServer;
 import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.BlockChainUtils;
@@ -29,10 +30,14 @@ public class BlockChainController {
     private P2pServer p2pServer;
 
     @Autowired
+    private Miner miner;
+
+    @Autowired
     public BlockChainController(BlockChain blockChain, Wallet wallet, P2pServer p2pServer) {
         this.blockChain = blockChain;
         this.wallet = wallet;
         this.p2pServer = p2pServer;
+        this.miner = miner;
     }
 
     /**
@@ -94,7 +99,9 @@ public class BlockChainController {
     @RequestMapping(value = "/mine-transactions", method = RequestMethod.GET)
     @ResponseBody
     public String mineBlock() {
-        return "hello";
+        Block block = miner.mine();
+        System.out.println(block.toString());
+        return block.toString();
     }
 
 
