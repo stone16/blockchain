@@ -88,7 +88,7 @@ public class Wallet {
      */
     private void genKeyPair() {
         try{
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC", "SunEC");
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC","SunEC");
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp192k1");
             keyGen.initialize(ecSpec, random);

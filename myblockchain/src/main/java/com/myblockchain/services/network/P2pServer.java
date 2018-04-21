@@ -9,6 +9,7 @@ import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.utils.Configuration;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Data
+@Component
 public class P2pServer implements Runnable {
 
     static HashMap<String, P2pClient> clients = new HashMap<>();
