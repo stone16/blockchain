@@ -72,7 +72,7 @@ public class Block {
             hash = Block.calculateHash(timeStamp, lastHash, difficulty, nonce, merkleRoot);
             nonce++;
         }
-        return new Block(timeStamp, lastHash, hash, nonce, difficulty, transactions, merkleRoot);
+        return new Block(timeStamp, lastHash, hash, nonce - 1, difficulty, transactions, merkleRoot);
     }
 
     /**

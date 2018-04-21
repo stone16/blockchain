@@ -172,10 +172,7 @@ public class BlockChain {
      * @return
      */
     public boolean isValidChain(List<Block> bc) {
-        if (!bc.get(0).toString().equals(Block.genesis().toString())) {
-            return false;
-        }
-        for (int i = 0; i < bc.size(); i++) {
+        for (int i = 1; i < bc.size(); i++) {
             Block curtBlock = bc.get(i);
             Block prevBlock = bc.get(i - 1);
             String curtHash = Block.calculateHash(curtBlock.getTimeStamp(), curtBlock.getLastHash(), curtBlock.getDifficulty(),

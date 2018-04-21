@@ -37,6 +37,11 @@ public class Miner {
         validTransaction.add(Transaction.rewardMinner(wallet, Configuration.MINING_REWARD));
         Block latestBlock = blockchain.addBlock(validTransaction);
         p2p.broadcastChains(blockchain.getChain());
+        try{
+            Thread.sleep(1000);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         pool.updateTransactionPool(validTransaction);
         p2p.broadcastClearTransaction(validTransaction);
         return latestBlock;

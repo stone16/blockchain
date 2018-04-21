@@ -108,6 +108,7 @@ public class BlockChainTest {
 
     @Test
     public void isValidChain() throws Exception {
+        Assert.assertEquals(blockChain.isValidChain(blockChain.getChain()), true);
     }
 
     @Test
