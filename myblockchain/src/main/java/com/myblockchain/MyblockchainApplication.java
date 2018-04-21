@@ -34,7 +34,9 @@ public class MyblockchainApplication {
 
 	@Bean
 	P2pServer p2pServer(BlockChain blockChain, TransactionPool transactionPool) {
-		return new P2pServer(8888, blockChain, transactionPool);
+		P2pServer p2pServer = new P2pServer(8888, blockChain, transactionPool);
+		p2pServer.init();
+		return p2pServer;
 	}
 }
 

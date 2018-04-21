@@ -49,6 +49,7 @@ public class Connection implements Runnable {
      * @param s incoming json string
      */
     private void msgHandler(String s) {
+        System.out.println(s);
         try {
             ObjectMapper om = new ObjectMapper();
             Msg msg = om.readValue(s, Msg.class);
@@ -92,6 +93,10 @@ public class Connection implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isClosed() {
+        return s.isClosed();
     }
 }
 

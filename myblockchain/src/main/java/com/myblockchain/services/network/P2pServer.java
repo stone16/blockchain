@@ -14,10 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Component
@@ -82,6 +79,7 @@ public class P2pServer implements Runnable {
             }
             Msg d = new Msg(Configuration.MessageType.REGISTRATION, ip);
             String[] part = broadcastAddr.trim().split("\\.");
+            System.out.println(broadcastAddr);
             for (int i = 0; i < 255; i++) {
                 for (int j = 0; j < 255; j++) {
                     for (int k = 0; k < 255; k++) {
@@ -212,10 +210,20 @@ public class P2pServer implements Runnable {
                 Socket s = ss.accept();
                 Connection c = new Connection(s, ss, pool, blockchain);
                 connections.add(c);
-                //TODO: check connections status
+                checkClient(connections);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private synchronized void checkClient(List<Connection> connections) {
+        Iterator<Connection> ConnIter = connections.iterator();
+        while (ConnIter.hasNext()) {
+            Connection c = ConnIter.next();
+            if (c.isClosed()) {
+                ConnIter.remove();
+            }
         }
     }
 }
