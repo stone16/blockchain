@@ -160,7 +160,7 @@ public class BlockChain {
      * @param transactions
      * @return Block
      */
-    public Block addBlock(List<Transaction> transactions) {
+    public Block addBlock(ArrayList<Transaction> transactions) {
         Block block = Block.mineBlock(chain.get(chain.size() - 1), transactions);
         chain.add(block);
         return block;
