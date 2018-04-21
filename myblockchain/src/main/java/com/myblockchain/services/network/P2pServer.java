@@ -9,6 +9,7 @@ import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.utils.Configuration;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
@@ -27,7 +28,10 @@ public class P2pServer implements Runnable {
     private ServerSocket ss;
     private boolean run;
 
+    @Autowired
     private TransactionPool pool;
+
+    @Autowired
     private BlockChain blockchain;
 
     public P2pServer() {}

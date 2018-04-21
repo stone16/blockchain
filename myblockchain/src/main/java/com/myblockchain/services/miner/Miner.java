@@ -7,16 +7,20 @@ import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.network.P2pServer;
 import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.Configuration;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-
+@Data
+@Component
 public class Miner {
     private BlockChain blockchain;
     private TransactionPool pool;
     private Wallet wallet;
     private P2pServer p2p;
 
-
+    @Autowired
     public Miner(BlockChain blockchain, TransactionPool pool, Wallet wallet, P2pServer p2p) {
         this.blockchain = blockchain;
         this.pool = pool;

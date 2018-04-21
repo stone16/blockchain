@@ -9,6 +9,8 @@ import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.utils.Configuration;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -22,7 +24,9 @@ public class Connection implements Runnable {
     private ServerSocket ss;
     private BufferedReader in;
     private BufferedWriter out;
+
     private TransactionPool pool;
+    
     private BlockChain blockchain;
 
     public Connection (Socket s, ServerSocket ss, TransactionPool pool, BlockChain blockchain) {
@@ -49,13 +53,16 @@ public class Connection implements Runnable {
      * @param s incoming json string
      */
     private void msgHandler(String s) {
-        //System.out.println(s);
+        System.out.println(s);
         try {
             ObjectMapper om = new ObjectMapper();
             Msg msg = om.readValue(s, Msg.class);
             if (msg.type.equals(Configuration.MessageType.CHAIN)) {
                 TypeFactory tf = om.getTypeFactory();
                 List<Block> newChain = om.readValue(msg.body, tf.constructCollectionType(List.class, Block.class));
+                for (Block b : newChain) {
+                    System.out.println(b);
+                }
                 blockchain.replaceChain(newChain);
             } else if (msg.type.equals(Configuration.MessageType.TRANSACTION)) {
                 pool.updateOrAddTransaction(om.readValue(msg.body, Transaction.class));
