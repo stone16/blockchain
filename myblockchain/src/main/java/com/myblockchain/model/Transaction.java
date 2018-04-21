@@ -12,7 +12,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Data
 @Component
@@ -125,7 +124,7 @@ public class Transaction {
         String data = sender[0]+ sender[1] + recipient[0] + recipient[1] + outputs.toString();
         PublicKey senderPublicKey = BlockChainUtils.convertStringtoKey(sender);
         return BlockChainUtils.verifySignature(senderPublicKey, data, signature) &&
-                ((this.getInputs() == null) || (this.getInputsSum() == this.getOutputsSum()));
+                ((this.getInputs() == null) || (this.calculateInputsSum() == this.calculateOutputsSum()));
     }
 
     /**
@@ -156,7 +155,7 @@ public class Transaction {
      * get the total amount of inputs
      * @return float
      */
-    public float getInputsSum() {
+    public float calculateInputsSum() {
         if (inputs == null) {
             return 0;
         }
@@ -172,7 +171,7 @@ public class Transaction {
      * get the total amount of outputs
      * @return
      */
-    public float getOutputsSum() {
+    public float calculateOutputsSum() {
         float sum = 0;
         for(TransactionOutput to : outputs) {
             sum += to.getAmount();
