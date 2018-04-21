@@ -59,6 +59,7 @@ public class BlockChainController {
      * @return
      */
     @RequestMapping(value = "/transactions", method = RequestMethod.GET)
+    @ResponseBody
     public Map<String, TransactionOutput> showTransactionPool() {
         return wallet.getUTXOs();
     }
@@ -68,6 +69,7 @@ public class BlockChainController {
      * @return
      */
     @RequestMapping(value = "/transact", method = RequestMethod.POST)
+    @ResponseBody
     public String launchTransaction(@RequestBody PublicKey recipient, @RequestBody float amount) {
         Transaction newTransaction = Transaction.newTransaction(wallet, recipient, amount);
         p2pServer.broadcastTransaction(newTransaction);
@@ -82,8 +84,7 @@ public class BlockChainController {
     @RequestMapping(value = "/public-key", method = RequestMethod.GET)
     @ResponseBody
     public String[] showAddress() {
-        String[] res = BlockChainUtils.getPublicKeyDetails(wallet.getPublicKey());
-        return res;
+        return BlockChainUtils.getPublicKeyDetails(wallet.getPublicKey());
     }
 
     /**
@@ -91,6 +92,7 @@ public class BlockChainController {
      * @return
      */
     @RequestMapping(value = "/mine-transactions", method = RequestMethod.GET)
+    @ResponseBody
     public String mineBlock() {
         return "hello";
     }
