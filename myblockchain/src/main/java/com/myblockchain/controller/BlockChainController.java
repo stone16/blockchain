@@ -3,6 +3,7 @@ package com.myblockchain.controller;
 import com.myblockchain.model.Block;
 import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionOutput;
+import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.miner.Miner;
 import com.myblockchain.services.network.P2pServer;
@@ -33,11 +34,15 @@ public class BlockChainController {
     private Miner miner;
 
     @Autowired
-    public BlockChainController(BlockChain blockChain, Wallet wallet, P2pServer p2pServer) {
+    TransactionPool transactionPool;
+
+    @Autowired
+    public BlockChainController(BlockChain blockChain, Wallet wallet, P2pServer p2pServer, Miner miner, TransactionPool transactionPool) {
         this.blockChain = blockChain;
         this.wallet = wallet;
         this.p2pServer = p2pServer;
         this.miner = miner;
+        this.transactionPool = transactionPool;
     }
 
     /**
@@ -76,7 +81,7 @@ public class BlockChainController {
     @RequestMapping(value = "/transact", method = RequestMethod.POST)
     @ResponseBody
     public String launchTransaction(@RequestBody String[] recipient, @RequestBody float amount) {
-        Transaction newTransaction = Transaction.newTransaction(wallet, recipient, amount);
+        Transaction newTransaction = wallet.createTransaction(recipient, amount, transactionPool);
         p2pServer.broadcastTransaction(newTransaction);
         return "redirect:transactions";
     }

@@ -90,8 +90,8 @@ public class Transaction {
         //Generate transaction outputs:
         float balance = total - amount; //get value of inputs then the balance
         Transaction transaction = new Transaction(senderWallet, recipient, amount, newInputs);
-        TransactionOutput txOp1 = new TransactionOutput( BlockChainUtils.convertStringtoKey(recipient), amount, transaction.getTransactionId()); //send value to recipient
-        TransactionOutput txOp2 = new TransactionOutput( senderWallet.getPublicKey(), balance,transaction.getTransactionId()); //send the 'change' back to sender
+        TransactionOutput txOp1 = new TransactionOutput( recipient, amount, transaction.getTransactionId()); //send value to recipient
+        TransactionOutput txOp2 = new TransactionOutput( BlockChainUtils.convertKeytoString(senderWallet.getPublicKey()), balance,transaction.getTransactionId()); //send the 'change' back to sender
         transaction.getOutputs().add(txOp1);
         transaction.getOutputs().add(txOp2);
 
@@ -140,7 +140,7 @@ public class Transaction {
         Transaction rewardTransaction = new Transaction(minnerWallet,
                 BlockChainUtils.convertKeytoString(minnerWallet.getPublicKey()),
                 reward, null);
-        TransactionOutput newOutput = new TransactionOutput(minnerWallet.getPublicKey(),
+        TransactionOutput newOutput = new TransactionOutput(BlockChainUtils.convertKeytoString(minnerWallet.getPublicKey()),
                 reward, rewardTransaction.getTransactionId());
         ArrayList<TransactionOutput> newOutputs = new ArrayList<>();
         newOutputs.add(newOutput);

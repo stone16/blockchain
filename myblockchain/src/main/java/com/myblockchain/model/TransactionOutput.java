@@ -10,12 +10,12 @@ import java.util.Date;
 @Data
 public class TransactionOutput {
     private String Id;
-    private PublicKey recipient;
+    private String[] recipient;
     private float amount;
     private String parentTransId;
     private long timestamp;
 
-    public TransactionOutput(PublicKey recipient, float amount, String parentTransId) {
+    public TransactionOutput(String[] recipient, float amount, String parentTransId) {
         this.Id = BlockChainUtils.generateTransactionId();
         this.recipient = recipient;
         this.amount = amount;
@@ -23,12 +23,12 @@ public class TransactionOutput {
         this.timestamp = new Date().getTime();
     }
 
-    /**
-     * Determine whether a person owns this amount of money
-     * @param publicKey
-     * @return boolean
-     */
-    public boolean isMine(PublicKey publicKey) {
-        return publicKey == recipient;
-    }
+//    /**
+//     * Determine whether a person owns this amount of money
+//     * @param publicKey
+//     * @return boolean
+//     */
+//    public boolean isMine(PublicKey publicKey) {
+//        return publicKey == recipient;
+//    }
 }

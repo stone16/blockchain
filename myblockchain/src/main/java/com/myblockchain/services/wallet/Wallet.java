@@ -3,6 +3,7 @@ package com.myblockchain.services.wallet;
 
 import com.myblockchain.model.*;
 import com.myblockchain.services.blockchain.BlockChain;
+import com.myblockchain.utils.BlockChainUtils;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -65,7 +66,8 @@ public class Wallet {
     public void updateUTXOsFromMinnedBlock(Block minnedBlock) {
         for(Transaction tx : minnedBlock.getTransactions()) {
             for(TransactionOutput txOutput : tx.getOutputs()) {
-                if(txOutput.getRecipient().equals(this.getPublicKey())) {
+                PublicKey publicKey = BlockChainUtils.convertStringtoKey(txOutput.getRecipient());
+                if(publicKey.equals(this.getPublicKey())) {
                     this.UTXOs.put(txOutput.getId(), txOutput);
                 }
             }

@@ -34,17 +34,17 @@ public class TransactionPool {
     //TODO: enhance this part using stram()
     /**
      * Find out the existing transaction in transaction pool
-     * @param publicKey
+     * @param transactionId
      * @return Transaction
      */
-//    public Transaction existingTransaction(PublicKey publicKey) {
-//        for(Map.Entry<String, Transaction> entry : transactions.entrySet()) {
-//            if(entry.getValue().getSender() == publicKey) {
-//                return entry.getValue();
-//            }
-//        }
-//        return null;
-//    }
+    public Transaction existingTransaction(String transactionId) {
+        for(Map.Entry<String, Transaction> entry : transactions.entrySet()) {
+            if(entry.getKey().equals(transactionId)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
 
     /**
      * get N of transactions by indicating the num from the transaction pool
