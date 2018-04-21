@@ -104,12 +104,11 @@ public class Wallet {
      * create a new transaction
      * @param recipient
      * @param amount
-     * @param blockChain
      * @param transactionPool
      * @return Transaction
      */
-    public Transaction createTransaction(PublicKey recipient, float amount,
-                                         BlockChain blockChain, TransactionPool transactionPool) {
+    public Transaction createTransaction(String[] recipient, float amount,
+                                         TransactionPool transactionPool) {
         float balance = getBalance();
 
         if(amount > balance) {
@@ -117,13 +116,9 @@ public class Wallet {
             System.out.println("Amount exceceds current balance: " + amount + " > " + balance);
         }
 
-        Transaction transaction = transactionPool.existingTransaction(publicKey);
-        if(transaction != null) {
-            //transaction.update(this, recipient, amount);
-        } else {
-            transaction = Transaction.newTransaction(this, recipient, amount);
-            transactionPool.updateOrAddTransaction(transaction);
-        }
+        Transaction transaction = Transaction.newTransaction(this, recipient, amount);
+        transactionPool.updateOrAddTransaction(transaction);
+
         return transaction;
     }
 

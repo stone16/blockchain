@@ -96,7 +96,7 @@ public class BlockChainUtils {
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeySpecException
      */
-    public static String[] getPublicKeyDetails(PublicKey publicKey){
+    public static String[] convertKeytoString(PublicKey publicKey){
         ECPublicKey ecPublicKey= (ECPublicKey)publicKey;
         byte[] publicKeyX = ecPublicKey.getW().getAffineX().toByteArray();
         byte[] publicKeyY = ecPublicKey.getW().getAffineY().toByteArray();
@@ -111,7 +111,7 @@ public class BlockChainUtils {
      * @param encodedPublicKey
      * @return
      */
-    public static PublicKey deserialization(String[] encodedPublicKey) {
+    public static PublicKey convertStringtoKey(String[] encodedPublicKey) {
         PublicKey publicKey = null;
         try {
             String encodedPublicKeyX = encodedPublicKey[0];
@@ -120,7 +120,7 @@ public class BlockChainUtils {
             byte[] pkY = Base64.getDecoder().decode(encodedPublicKeyY);
             ECPoint pubPoint = new ECPoint(new BigInteger(1, pkX), new BigInteger(1, pkY));
             AlgorithmParameters parameters = AlgorithmParameters.getInstance("EC");
-            parameters.init(new ECGenParameterSpec("secp521r1"));
+            parameters.init(new ECGenParameterSpec("secp192k1"));
             ECParameterSpec ecParameters = parameters.getParameterSpec(ECParameterSpec.class);
             ECPublicKeySpec pubSpec = new ECPublicKeySpec(pubPoint, ecParameters);
             KeyFactory kf = KeyFactory.getInstance("EC");

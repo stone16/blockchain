@@ -20,8 +20,8 @@ import java.util.List;
 
 public class Transaction {
     private String transactionId;
-    private PublicKey sender;
-    private PublicKey recipient;
+    private String[] sender;
+    private String[] recipient;
     private float amount;
     private byte[] signature;
 
@@ -32,11 +32,11 @@ public class Transaction {
         this.transactionId = transactionId;
     }
 
-    public Transaction(Wallet senderWallet, PublicKey recipient,
+    public Transaction(Wallet senderWallet,  String[] recipient,
                        float amount, ArrayList<TransactionInput> inputs) {
         this.transactionId = BlockChainUtils.generateTransactionId();
         this.recipient = recipient;
-        this.sender = senderWallet.getPublicKey();
+        this.sender = BlockChainUtils.convertKeytoString(senderWallet.getPublicKey());
         this.amount = amount;
         this.inputs = inputs;
         this.outputs = new ArrayList<>();
@@ -50,7 +50,7 @@ public class Transaction {
      * @param amount
      * @return Transaction
      */
-    public static Transaction newTransaction(Wallet senderWallet, PublicKey recipient, float amount) {
+    public static Transaction newTransaction(Wallet senderWallet, String[] recipient, float amount) {
 
         //Check the balance of sender
         //TODO: fix hardcoded minimumValue
@@ -90,7 +90,7 @@ public class Transaction {
         //Generate transaction outputs:
         float balance = total - amount; //get value of inputs then the balance
         Transaction transaction = new Transaction(senderWallet, recipient, amount, newInputs);
-        TransactionOutput txOp1 = new TransactionOutput( recipient, amount, transaction.getTransactionId()); //send value to recipient
+        TransactionOutput txOp1 = new TransactionOutput( BlockChainUtils.convertStringtoKey(recipient), amount, transaction.getTransactionId()); //send value to recipient
         TransactionOutput txOp2 = new TransactionOutput( senderWallet.getPublicKey(), balance,transaction.getTransactionId()); //send the 'change' back to sender
         transaction.getOutputs().add(txOp1);
         transaction.getOutputs().add(txOp2);
@@ -112,9 +112,8 @@ public class Transaction {
      * @param privateKey
      */
     public void signTransaction(PrivateKey privateKey) {
-        String data = BlockChainUtils.getStringFromKey(sender) +
-                      BlockChainUtils.getStringFromKey(recipient) +
-                      outputs.toString();
+
+        String data = sender[0]+ sender[1] + recipient[0] + recipient[1] + outputs.toString();
         signature = BlockChainUtils.applySignature(privateKey, data);
     }
 
@@ -123,10 +122,9 @@ public class Transaction {
      * @return boolean
      */
     public boolean verifyTransaction() {
-        String data = BlockChainUtils.getStringFromKey(sender) +
-                BlockChainUtils.getStringFromKey(recipient) +
-                outputs.toString();
-        return BlockChainUtils.verifySignature(sender, data, signature) &&
+        String data = sender[0]+ sender[1] + recipient[0] + recipient[1] + outputs.toString();
+        PublicKey senderPublicKey = BlockChainUtils.convertStringtoKey(sender);
+        return BlockChainUtils.verifySignature(senderPublicKey, data, signature) &&
                 ((this.getInputs() == null) || (this.getInputsSum() == this.getOutputsSum()));
     }
 
@@ -139,7 +137,9 @@ public class Transaction {
     public static Transaction rewardMinner(Wallet minnerWallet, float reward) {
 
         //Create a new TransactionOutput with reward amount
-        Transaction rewardTransaction = new Transaction(minnerWallet, minnerWallet.getPublicKey(), reward, null);
+        Transaction rewardTransaction = new Transaction(minnerWallet,
+                BlockChainUtils.convertKeytoString(minnerWallet.getPublicKey()),
+                reward, null);
         TransactionOutput newOutput = new TransactionOutput(minnerWallet.getPublicKey(),
                 reward, rewardTransaction.getTransactionId());
         ArrayList<TransactionOutput> newOutputs = new ArrayList<>();

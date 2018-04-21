@@ -17,20 +17,20 @@ public class TransactionPoolTest {
     TransactionPool pool;
     @Before
     public void setUp() throws Exception {
-        walletA = new Wallet();
-        walletB = new Wallet();
-        pool = new TransactionPool();
-
-        Transaction transactionA = new Transaction(walletA, walletB.getPublicKey(),
-                5, null);
-        transactionA.signTransaction(walletA.getPrivateKey());
-
-        Transaction transactionB = new Transaction(walletA, walletB.getPublicKey(),
-                5, null);
-        transactionB.signTransaction(walletA.getPrivateKey());
-
-        pool.updateOrAddTransaction(transactionA);
-        pool.updateOrAddTransaction(transactionB);
+//        walletA = new Wallet();
+//        walletB = new Wallet();
+//        pool = new TransactionPool();
+//
+//        Transaction transactionA = new Transaction(walletA, walletB.getPublicKey(),
+//                5, null);
+//        transactionA.signTransaction(walletA.getPrivateKey());
+//
+//        Transaction transactionB = new Transaction(walletA, walletB.getPublicKey(),
+//                5, null);
+//        transactionB.signTransaction(walletA.getPrivateKey());
+//
+//        pool.updateOrAddTransaction(transactionA);
+//        pool.updateOrAddTransaction(transactionB);
 
 
     }

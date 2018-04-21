@@ -75,7 +75,7 @@ public class BlockChainController {
      */
     @RequestMapping(value = "/transact", method = RequestMethod.POST)
     @ResponseBody
-    public String launchTransaction(@RequestBody PublicKey recipient, @RequestBody float amount) {
+    public String launchTransaction(@RequestBody String[] recipient, @RequestBody float amount) {
         Transaction newTransaction = Transaction.newTransaction(wallet, recipient, amount);
         p2pServer.broadcastTransaction(newTransaction);
         return "redirect:transactions";
@@ -89,7 +89,7 @@ public class BlockChainController {
     @RequestMapping(value = "/public-key", method = RequestMethod.GET)
     @ResponseBody
     public String[] showAddress() {
-        return BlockChainUtils.getPublicKeyDetails(wallet.getPublicKey());
+        return BlockChainUtils.convertKeytoString(wallet.getPublicKey());
     }
 
     /**

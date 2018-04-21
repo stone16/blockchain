@@ -37,14 +37,14 @@ public class TransactionPool {
      * @param publicKey
      * @return Transaction
      */
-    public Transaction existingTransaction(PublicKey publicKey) {
-        for(Map.Entry<String, Transaction> entry : transactions.entrySet()) {
-            if(entry.getValue().getSender() == publicKey) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
+//    public Transaction existingTransaction(PublicKey publicKey) {
+//        for(Map.Entry<String, Transaction> entry : transactions.entrySet()) {
+//            if(entry.getValue().getSender() == publicKey) {
+//                return entry.getValue();
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * get N of transactions by indicating the num from the transaction pool

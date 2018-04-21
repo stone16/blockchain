@@ -2,6 +2,7 @@ package com.myblockchain.services.blockchain;
 
 import com.myblockchain.model.*;
 import com.myblockchain.services.wallet.Wallet;
+import com.myblockchain.utils.BlockChainUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class BlockChainTest {
         minedBlock = blockChain.addBlock(txPool.getTransactionList(5));
         sender.updateUTXOsFromMinnedBlock(minedBlock);
         txArrays.clear();
-        txArrays.add(Transaction.newTransaction(sender, recipient.getPublicKey(), 50));
+        txArrays.add(Transaction.newTransaction(sender, BlockChainUtils.convertKeytoString(recipient.getPublicKey()), 50));
         txArrays.forEach(transaction -> txPool.updateOrAddTransaction(transaction));
         minedBlock = blockChain.addBlock(txPool.getTransactionList(5));
         sender.updateUTXOsFromMinnedBlock(minedBlock);

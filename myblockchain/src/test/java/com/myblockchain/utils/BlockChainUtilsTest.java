@@ -18,10 +18,17 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BlockChainUtilsTest {
-    Wallet sender;
-    @Before
-    public void setUp() throws Exception {
-        sender = new Wallet();
+    Wallet sender = new Wallet();
+    @Test
+    public void convertKeytoString() throws Exception {
+
+    }
+
+    @Test
+    public void convertStringtoKey() throws Exception {
+        System.out.println(sender.getPublicKey().toString());
+        String[] middle = BlockChainUtils.convertKeytoString(sender.getPublicKey());
+        System.out.println(BlockChainUtils.convertStringtoKey(middle));
     }
 
 
