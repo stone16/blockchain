@@ -29,11 +29,20 @@ public class Miner implements Runnable {
         this.p2p = p2p;
     }
 
+    public void startMine() {
+        run = true;
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    public void stopMine() {
+        run = false;
+    }
+
     /**
-     * Miner try to mine block
-     * @return
+     * Thread Entrance, Miner try to mine block
      */
-    public void mine() {
+    public void run() {
         while (run) {
             ArrayList<Transaction> validTransaction = pool.getTransactionList(Configuration.TRANSACTION_NUM);
             validTransaction.add(Transaction.rewardMinner(wallet, Configuration.MINING_REWARD));
@@ -49,20 +58,7 @@ public class Miner implements Runnable {
             }
             pool.updateTransactionPool(validTransaction);
             p2p.broadcastClearTransaction(validTransaction);
+            wallet.updateUTXOsFromWholeBlockChain(blockchain);
         }
-    }
-
-    public void startMine() {
-        run = true;
-        Thread thread = new Thread(this);
-        thread.start();
-    }
-
-    public void stopMine() {
-        run = false;
-    }
-
-    public void run() {
-        mine();
     }
 }

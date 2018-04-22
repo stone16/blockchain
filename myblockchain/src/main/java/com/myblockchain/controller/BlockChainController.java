@@ -65,13 +65,13 @@ public class BlockChainController {
     }
 
     /**
-     * Show all transactions in transaction pool
+     * Show all user's address
      * @return
      */
-    @RequestMapping(value = "/transactions", method = RequestMethod.GET)
+    @RequestMapping(value = "/public-key", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Transaction> showTransactionPool() {
-        return transactionPool.getTransactions();
+    public String[] showAddress() {
+        return BlockChainUtils.convertKeytoString(wallet.getPublicKey());
     }
 
     /**
@@ -82,6 +82,16 @@ public class BlockChainController {
     @ResponseBody
     public Float showBalance() {
         return wallet.getBalance();
+    }
+
+    /**
+     * Show all transactions in transaction pool
+     * @return
+     */
+    @RequestMapping(value = "/transactions", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Transaction> showTransactionPool() {
+        return transactionPool.getTransactions();
     }
 
     /**
@@ -101,25 +111,19 @@ public class BlockChainController {
         return "redirect:transactions";
     }
 
-
-    /**
-     * Show all user's address
-     * @return
-     */
-    @RequestMapping(value = "/public-key", method = RequestMethod.GET)
-    @ResponseBody
-    public String[] showAddress() {
-        return BlockChainUtils.convertKeytoString(wallet.getPublicKey());
-    }
-
     /**
      * Mine block that contains transactions
      * @return
      */
-    @RequestMapping(value = "/mine-transactions", method = RequestMethod.GET)
-    public void mineBlock() {
+    @RequestMapping(value = "/startmine", method = RequestMethod.GET)
+    public void startMineBlock() {
         miner.startMine();
-        wallet.updateUTXOsFromWholeBlockChain(blockChain);
+
+    }
+
+    @RequestMapping(value = "/stopmine", method = RequestMethod.GET)
+    public void stopMineBlock() {
+        miner.stopMine();
     }
 
 
