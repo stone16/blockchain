@@ -3,7 +3,7 @@ package com.myblockchain.utils;
 public class Configuration {
 
     public static int DIFFICULTY = 4;
-    public static int MINE_RATE = 20 * Time.SEC;
+    public static int MINE_RATE = Time.MIN;
     public static int INITIAL_BALANCE = 500;
     public static int MINING_REWARD = 50;
     public static int TRANSACTION_NUM = 10;

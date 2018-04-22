@@ -8,6 +8,8 @@ import lombok.Data;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
 
 @Data
 public class P2pClient implements Runnable {
@@ -17,7 +19,7 @@ public class P2pClient implements Runnable {
     private BufferedWriter out;
     private String host;
     private int port = Configuration.P2PConfig.P2P_PORT;
-    private String msg;
+    private Queue<String> msgQueue = new LinkedList<>();
 
     public P2pClient(String host) {
         this.host = host;
@@ -57,7 +59,7 @@ public class P2pClient implements Runnable {
      */
     public void sendMsg(Msg d) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        msg = mapper.writeValueAsString(d);
+        msgQueue.offer(mapper.writeValueAsString(d));
         Thread t = new Thread(this);
         t.start();
     }
@@ -65,17 +67,19 @@ public class P2pClient implements Runnable {
     /**
      * Thread entrance
      */
-    public synchronized void run() {
-        connect();
-        try {
-            if (out == null) {
-                return;
+    public void run() {
+        synchronized (this) {
+            connect();
+            try {
+                if (out == null) {
+                    return;
+                }
+                out.write(msgQueue.poll());
+                // TODO: Do we need any response?
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            out.write(msg);
-            // TODO: Do we need any response?
-        } catch (IOException e) {
-            e.printStackTrace();
+            close();
         }
-        close();
     }
 }

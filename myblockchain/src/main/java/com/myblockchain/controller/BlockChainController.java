@@ -15,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.PublicKey;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class BlockChainController {
@@ -72,6 +71,15 @@ public class BlockChainController {
     @ResponseBody
     public String[] showAddress() {
         return BlockChainUtils.convertKeytoString(wallet.getPublicKey());
+    }
+
+    /**
+     * Get peers ip list
+     */
+    @RequestMapping(value = "/peers", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> showPeerIPList() {
+        return new LinkedList<>(P2pServer.clients.keySet());
     }
 
     /**

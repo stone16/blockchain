@@ -22,7 +22,7 @@ import java.util.*;
 @Component
 public class P2pServer implements Runnable {
 
-    static HashMap<String, P2pClient> clients = new HashMap<>();
+    public static HashMap<String, P2pClient> clients = new HashMap<>();
     private List<Connection> connections = new LinkedList<>();
     private String ip;
     private int port = Configuration.P2PConfig.P2P_PORT;
@@ -53,7 +53,7 @@ public class P2pServer implements Runnable {
      */
     public static void Pair(String peerIp) {
         try {
-            if (clients.containsKey(peerIp)) {
+            if (clients.containsKey(peerIp) || peerIp.equals("127.0.0.1")) {
                 return;
             }
             System.out.println("PeerId: " + peerIp);
