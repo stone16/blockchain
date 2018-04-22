@@ -3,7 +3,7 @@ package com.myblockchain.services.network;
 import com.myblockchain.model.Block;
 import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionInput;
-import com.myblockchain.model.TransactionPool;
+import com.myblockchain.services.wallet.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.BlockChainUtils;
@@ -12,8 +12,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class P2pServerTest {
 

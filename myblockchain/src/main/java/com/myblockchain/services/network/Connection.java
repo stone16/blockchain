@@ -5,13 +5,11 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.myblockchain.model.Block;
 import com.myblockchain.model.Msg;
 import com.myblockchain.model.Transaction;
-import com.myblockchain.model.TransactionPool;
+import com.myblockchain.services.wallet.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.Configuration;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -32,7 +30,7 @@ public class Connection implements Runnable {
 
     private Wallet wallet;
 
-    public Connection (Socket s, ServerSocket ss, TransactionPool pool, BlockChain blockchain, Wallet wallet) {
+    Connection (Socket s, ServerSocket ss, TransactionPool pool, BlockChain blockchain, Wallet wallet) {
         this.s = s;
         this.ss = ss;
         this.pool = pool;
@@ -109,7 +107,7 @@ public class Connection implements Runnable {
         }
     }
 
-    public boolean isClosed() {
+    boolean isClosed() {
         return s.isClosed();
     }
 }

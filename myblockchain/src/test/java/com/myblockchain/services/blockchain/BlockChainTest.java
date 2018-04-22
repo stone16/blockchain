@@ -1,6 +1,7 @@
 package com.myblockchain.services.blockchain;
 
 import com.myblockchain.model.*;
+import com.myblockchain.services.wallet.TransactionPool;
 import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.BlockChainUtils;
 import org.junit.Assert;
@@ -11,11 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

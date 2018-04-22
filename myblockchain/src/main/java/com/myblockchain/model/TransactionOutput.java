@@ -3,9 +3,7 @@ package com.myblockchain.model;
 import com.myblockchain.utils.BlockChainUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
-import java.security.PublicKey;
 import java.util.Date;
 
 @Data

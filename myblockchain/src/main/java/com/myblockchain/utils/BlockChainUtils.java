@@ -1,11 +1,5 @@
 package com.myblockchain.utils;
 
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.ECPointUtil;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
-import org.bouncycastle.jce.spec.ECNamedCurveSpec;
-
 import javax.xml.bind.DatatypeConverter;
 import java.math.BigInteger;
 import java.security.*;
@@ -13,7 +7,6 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.*;
 import java.util.Base64;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 public class BlockChainUtils {
     /**

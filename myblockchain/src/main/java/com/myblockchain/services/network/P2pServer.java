@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myblockchain.model.Block;
 import com.myblockchain.model.Msg;
 import com.myblockchain.model.Transaction;
-import com.myblockchain.model.TransactionPool;
+import com.myblockchain.services.wallet.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.Configuration;
@@ -49,9 +49,9 @@ public class P2pServer implements Runnable {
 
     /**
      * Pairing with the the new P2P server
-     * @param peerIp
+     * @param peerIp peer ip address
      */
-    public static void Pair(String peerIp) {
+    static void Pair(String peerIp) {
         try {
             if (clients.containsKey(peerIp) || peerIp.equals("127.0.0.1")) {
                 return;
@@ -241,21 +241,12 @@ public class P2pServer implements Runnable {
                 Socket s = ss.accept();
                 Connection c = new Connection(s, ss, pool, blockchain, wallet);
                 connections.add(c);
-                checkClient(connections);
+                connections.removeIf(Connection::isClosed);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private synchronized void checkClient(List<Connection> connections) {
-        Iterator<Connection> ConnIter = connections.iterator();
-        while (ConnIter.hasNext()) {
-            Connection c = ConnIter.next();
-            if (c.isClosed()) {
-                ConnIter.remove();
-            }
-        }
-    }
 }
 

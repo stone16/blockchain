@@ -1,8 +1,6 @@
 package com.myblockchain;
 
-import com.myblockchain.model.Block;
-import com.myblockchain.model.Transaction;
-import com.myblockchain.model.TransactionPool;
+import com.myblockchain.services.wallet.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.miner.Miner;
 import com.myblockchain.services.network.P2pServer;

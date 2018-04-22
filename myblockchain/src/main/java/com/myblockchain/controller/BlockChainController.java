@@ -2,19 +2,15 @@ package com.myblockchain.controller;
 
 import com.myblockchain.model.Block;
 import com.myblockchain.model.Transaction;
-import com.myblockchain.model.TransactionOutput;
-import com.myblockchain.model.TransactionPool;
+import com.myblockchain.services.wallet.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.miner.Miner;
 import com.myblockchain.services.network.P2pServer;
 import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.BlockChainUtils;
-import com.sun.org.apache.regexp.internal.RE;
-import org.bouncycastle.util.encoders.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
 import java.util.*;
 
 @RestController
@@ -120,8 +116,7 @@ public class BlockChainController {
     }
 
     /**
-     * Mine block that contains transactions
-     * @return
+     * Starting mine block that contains transactions
      */
     @RequestMapping(value = "/startmine", method = RequestMethod.GET)
     public void startMineBlock() {
@@ -129,6 +124,9 @@ public class BlockChainController {
 
     }
 
+    /**
+     * Stoping mine
+     */
     @RequestMapping(value = "/stopmine", method = RequestMethod.GET)
     public void stopMineBlock() {
         miner.stopMine();

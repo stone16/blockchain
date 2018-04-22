@@ -21,7 +21,7 @@ public class P2pClient implements Runnable {
     private int port = Configuration.P2PConfig.P2P_PORT;
     private Queue<String> msgQueue = new LinkedList<>();
 
-    public P2pClient(String host) {
+    P2pClient(String host) {
         this.host = host;
     }
 
@@ -54,12 +54,12 @@ public class P2pClient implements Runnable {
 
     /**
      * Send message to the remote P2P server
-     * @param d
+     * @param msg message to be sent
      * @throws IOException
      */
-    public void sendMsg(Msg d) throws IOException {
+    void sendMsg(Msg msg) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        msgQueue.offer(mapper.writeValueAsString(d));
+        msgQueue.offer(mapper.writeValueAsString(msg));
         Thread t = new Thread(this);
         t.start();
     }
