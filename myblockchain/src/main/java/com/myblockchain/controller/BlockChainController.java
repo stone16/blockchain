@@ -75,13 +75,23 @@ public class BlockChainController {
     }
 
     /**
+     * Show all transactions in transaction pool
+     * @return
+     */
+    @RequestMapping(value = "/wallet", method = RequestMethod.GET)
+    @ResponseBody
+    public Float showBalance() {
+        return wallet.getBalance();
+    }
+
+    /**
      * Launch a new transaction
      * @return
      */
     @RequestMapping(value = "/transact", method = RequestMethod.POST)
     @ResponseBody
     public String launchTransaction(@RequestBody Map<String, Object> payload) {
-        Float amount = Float.valueOf((int)payload.get("amount"));
+        Float amount = (float)(double)payload.get("amount");
         System.out.println(amount);
         String middle = payload.get("recipient").toString();
         String[] recipient = { middle.substring(1, middle.indexOf(',')),
