@@ -188,13 +188,14 @@ public class BlockChain {
      * replace current chain with new chain
      * @param newChain
      */
-    public void replaceChain(List<Block> newChain) {
+    public boolean replaceChain(List<Block> newChain) {
         if (newChain.size() < chain.size()) {
-            return;
+            return false;
         } else if (!isValidChain(newChain)) {
-            return;
+            return false;
         }
         chain = newChain;
+        return true;
     }
 
     /**

@@ -7,6 +7,7 @@ import com.myblockchain.model.Msg;
 import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
+import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.Configuration;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,16 @@ public class P2pServer implements Runnable {
     @Autowired
     private BlockChain blockchain;
 
+    @Autowired
+    private Wallet wallet;
+
     public P2pServer() {}
 
-    public P2pServer(int port, BlockChain blockchain, TransactionPool pool) {
+    public P2pServer(int port, BlockChain blockchain, TransactionPool pool, Wallet wallet) {
         this.port = port;
         this.blockchain = blockchain;
         this.pool = pool;
+        this.wallet = wallet;
     }
 
     /**
@@ -231,7 +236,7 @@ public class P2pServer implements Runnable {
                     return;
                 }
                 Socket s = ss.accept();
-                Connection c = new Connection(s, ss, pool, blockchain);
+                Connection c = new Connection(s, ss, pool, blockchain, wallet);
                 connections.add(c);
                 checkClient(connections);
             }

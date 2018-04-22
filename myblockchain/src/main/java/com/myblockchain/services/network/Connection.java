@@ -7,6 +7,7 @@ import com.myblockchain.model.Msg;
 import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionPool;
 import com.myblockchain.services.blockchain.BlockChain;
+import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.Configuration;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,14 @@ public class Connection implements Runnable {
     
     private BlockChain blockchain;
 
-    public Connection (Socket s, ServerSocket ss, TransactionPool pool, BlockChain blockchain) {
+    private Wallet wallet;
+
+    public Connection (Socket s, ServerSocket ss, TransactionPool pool, BlockChain blockchain, Wallet wallet) {
         this.s = s;
         this.ss = ss;
         this.pool = pool;
         this.blockchain = blockchain;
+        this.wallet = wallet;
         try {
             in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
@@ -63,7 +67,10 @@ public class Connection implements Runnable {
                 for (Block b : newChain) {
                     System.out.println(b);
                 }
-                blockchain.replaceChain(newChain);
+                if(blockchain.replaceChain(newChain)) {
+                    wallet.updateUTXOsFromWholeBlockChain(blockchain);
+                }
+
             } else if (msg.type.equals(Configuration.MessageType.TRANSACTION)) {
                 pool.updateOrAddTransaction(om.readValue(msg.body, Transaction.class));
             } else if (msg.type.equals(Configuration.MessageType.CLEAR)) {
