@@ -14,11 +14,12 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 @Data
 @Component
-public class Miner {
+public class Miner implements Runnable {
     private BlockChain blockchain;
     private TransactionPool pool;
     private Wallet wallet;
     private P2pServer p2p;
+    private boolean run;
 
     @Autowired
     public Miner(BlockChain blockchain, TransactionPool pool, Wallet wallet, P2pServer p2p) {
@@ -32,18 +33,36 @@ public class Miner {
      * Miner try to mine block
      * @return
      */
-    public Block mine() {
-        ArrayList<Transaction> validTransaction = pool.getTransactionList(Configuration.TRANSACTION_NUM);
-        validTransaction.add(Transaction.rewardMinner(wallet, Configuration.MINING_REWARD));
-        Block latestBlock = blockchain.addBlock(validTransaction);
-        p2p.broadcastChains(blockchain.getChain());
-        try{
-            Thread.sleep(1000);
-        } catch(Exception e) {
-            e.printStackTrace();
+    public void mine() {
+        while (run) {
+            ArrayList<Transaction> validTransaction = pool.getTransactionList(Configuration.TRANSACTION_NUM);
+            validTransaction.add(Transaction.rewardMinner(wallet, Configuration.MINING_REWARD));
+            Block latestBlock = blockchain.addBlock(validTransaction);
+            if (latestBlock == null) {
+                continue;
+            }
+            p2p.broadcastChains(blockchain.getChain());
+            try{
+                Thread.sleep(1000);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            pool.updateTransactionPool(validTransaction);
+            p2p.broadcastClearTransaction(validTransaction);
         }
-        pool.updateTransactionPool(validTransaction);
-        p2p.broadcastClearTransaction(validTransaction);
-        return latestBlock;
+    }
+
+    public void startMine() {
+        run = true;
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    public void stopMine() {
+        run = false;
+    }
+
+    public void run() {
+        mine();
     }
 }

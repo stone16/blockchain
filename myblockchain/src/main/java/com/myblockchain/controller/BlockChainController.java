@@ -117,11 +117,9 @@ public class BlockChainController {
      * @return
      */
     @RequestMapping(value = "/mine-transactions", method = RequestMethod.GET)
-    @ResponseBody
-    public Block mineBlock() {
-        Block block = miner.mine();
+    public void mineBlock() {
+        miner.startMine();
         wallet.updateUTXOsFromWholeBlockChain(blockChain);
-        return block;
     }
 
 

@@ -162,8 +162,11 @@ public class BlockChain {
      * @return Block
      */
     public Block addBlock(ArrayList<Transaction> transactions) {
+        Block.minable = true;
         Block block = Block.mineBlock(chain.get(chain.size() - 1), transactions);
-        chain.add(block);
+        if (block != null) {
+            chain.add(block);
+        }
         return block;
     }
 
@@ -196,6 +199,7 @@ public class BlockChain {
             return false;
         }
         chain = newChain;
+        Block.minable = false;
         return true;
     }
 

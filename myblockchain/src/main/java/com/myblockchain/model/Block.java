@@ -23,6 +23,8 @@ public class Block {
     private List<Transaction> transactions; //Transactions
     private String merkleRoot;
 
+    public static boolean minable;
+
     public Block(long timeStamp, String lastHash, String hash, long nonce,
                  int difficulty, List<Transaction> transactions, String merkleRoot) {
         this.timeStamp = timeStamp;
@@ -71,6 +73,9 @@ public class Block {
             difficulty = Block.adjustDifficulty(lastBlock, timeStamp);
             hash = Block.calculateHash(timeStamp, lastHash, difficulty, nonce, merkleRoot);
             nonce++;
+            if (!minable) {
+                return null;
+            }
         }
         return new Block(timeStamp, lastHash, hash, nonce - 1, difficulty, transactions, merkleRoot);
     }

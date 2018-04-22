@@ -80,7 +80,10 @@ public class P2pServer implements Runnable {
                 {
                     InetAddress addr = a.nextElement();
                     NetworkInterface netInterface = NetworkInterface.getByInetAddress(addr);
-                    if (!netInterface.isLoopback() && netInterface.isUp() && addr.getHostAddress().substring(0, 7).equals("192.168")) {
+                    if (!netInterface.isLoopback() &&
+                            netInterface.isUp() &&
+                            !addr.getHostAddress().equals("127.0.0.1") &&
+                            addr.getHostAddress().split("\\.").length == 4) {
                         res[0] = addr.getHostAddress();
                         List<InterfaceAddress> interfaceAddresses = netInterface.getInterfaceAddresses();
                         for (InterfaceAddress interfaceAddress : interfaceAddresses) {
