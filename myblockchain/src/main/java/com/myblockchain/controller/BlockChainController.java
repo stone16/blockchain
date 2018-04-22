@@ -70,8 +70,8 @@ public class BlockChainController {
      */
     @RequestMapping(value = "/transactions", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, TransactionOutput> showTransactionPool() {
-        return wallet.getUTXOs();
+    public Map<String, Transaction> showTransactionPool() {
+        return transactionPool.getTransactions();
     }
 
     /**

@@ -1,9 +1,11 @@
 package com.myblockchain.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@NoArgsConstructor
 public class TransactionInput {
     private String transactionOutputId;
     private TransactionOutput UTXO;
