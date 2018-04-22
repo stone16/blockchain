@@ -80,7 +80,12 @@ public class BlockChainController {
      */
     @RequestMapping(value = "/transact", method = RequestMethod.POST)
     @ResponseBody
-    public String launchTransaction(@RequestBody String[] recipient, @RequestBody float amount) {
+    public String launchTransaction(@RequestBody Map<String, Object> payload) {
+        Float amount = Float.valueOf((int)payload.get("amount"));
+        System.out.println(amount);
+        String middle = payload.get("recipient").toString();
+        String[] recipient = { middle.substring(1, middle.indexOf(',')),
+                middle.substring(middle.indexOf(',') + 2, middle.length() - 1)};
         Transaction newTransaction = wallet.createTransaction(recipient, amount, transactionPool);
         p2pServer.broadcastTransaction(newTransaction);
         return "redirect:transactions";
