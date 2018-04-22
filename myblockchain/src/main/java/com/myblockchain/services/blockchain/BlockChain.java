@@ -5,6 +5,7 @@ import com.myblockchain.model.Transaction;
 import com.myblockchain.model.TransactionInput;
 import com.myblockchain.model.TransactionOutput;
 import com.myblockchain.services.wallet.Wallet;
+import com.myblockchain.utils.BlockChainUtils;
 import com.myblockchain.utils.PersistentUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -107,7 +108,7 @@ public class BlockChain {
         Map<String, TransactionOutput> walletUTXOs = new HashMap<>();
 
         for(TransactionOutput txOutput : allUTXOs.values()) {
-            if(txOutput.getRecipient().equals(walletAddress)) {
+            if(BlockChainUtils.convertStringtoKey(txOutput.getRecipient()).equals(walletAddress)) {
                 walletUTXOs.put(txOutput.getId(), txOutput);
             }
         }

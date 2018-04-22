@@ -120,7 +120,7 @@ public class BlockChainController {
     @ResponseBody
     public Block mineBlock() {
         Block block = miner.mine();
-        wallet.updateUTXOsFromMinnedBlock(block);
+        wallet.updateUTXOsFromWholeBlockChain(blockChain);
         return block;
     }
 
