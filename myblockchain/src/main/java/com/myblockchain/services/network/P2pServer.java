@@ -51,7 +51,7 @@ public class P2pServer implements Runnable {
             if (clients.containsKey(peerIp)) {
                 return;
             }
-            System.out.println(peerIp);
+            System.out.println("PeerId: " + peerIp);
             P2pClient client = new P2pClient(peerIp);
             clients.put(peerIp, client);
 
@@ -63,27 +63,47 @@ public class P2pServer implements Runnable {
         }
     }
 
+    private String[] getlocalAndBroadcastIP() {
+        String[] res = new String[2];
+        try {
+            Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
+            for (; n.hasMoreElements();)
+            {
+                NetworkInterface e = n.nextElement();
+                Enumeration<InetAddress> a = e.getInetAddresses();
+                for (; a.hasMoreElements();)
+                {
+                    InetAddress addr = a.nextElement();
+                    NetworkInterface netInterface = NetworkInterface.getByInetAddress(addr);
+                    if (!netInterface.isLoopback() && netInterface.isUp() && addr.getHostAddress().substring(0, 7).equals("192.168")) {
+                        res[0] = addr.getHostAddress();
+                        List<InterfaceAddress> interfaceAddresses = netInterface.getInterfaceAddresses();
+                        for (InterfaceAddress interfaceAddress : interfaceAddresses) {
+                            if (interfaceAddress.getBroadcast() == null) {
+                                continue;
+                            }
+                            res[1] = interfaceAddress.getBroadcast().getHostAddress();
+                            return res;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return res;
+    }
+
     /**
      * Broadcast the pair request to all subnet ip address
      */
     private void findPeer() {
         try {
-            String broadcastAddr = "";
-            InetAddress address = InetAddress.getLocalHost();
-            String ip = address.getHostAddress();
-            NetworkInterface netInterface = NetworkInterface.getByInetAddress(address);
-            if (!netInterface.isLoopback() && netInterface.isUp()) {
-                List<InterfaceAddress> interfaceAddresses = netInterface.getInterfaceAddresses();
-                for (InterfaceAddress interfaceAddress : interfaceAddresses) {
-                    if (interfaceAddress.getBroadcast() == null) {
-                        continue;
-                    }
-                    broadcastAddr = interfaceAddress.getBroadcast().getHostAddress();
-                }
-            }
+            String[] addr = getlocalAndBroadcastIP();
+            ip = addr[0];
+            String broadcastAddr = addr[1];
             Msg d = new Msg(Configuration.MessageType.REGISTRATION, ip);
             String[] part = broadcastAddr.trim().split("\\.");
-            System.out.println(broadcastAddr);
             for (int i = 0; i < 255; i++) {
                 for (int j = 0; j < 255; j++) {
                     for (int k = 0; k < 255; k++) {
@@ -97,7 +117,6 @@ public class P2pServer implements Runnable {
                             if (receiver.equals(ip)) {
                                 continue;
                             }
-                            // System.out.println(receiver);
                             P2pClient s = new P2pClient(receiver);
                             s.sendMsg(d);
                             if (!part[3].equals("255")) {

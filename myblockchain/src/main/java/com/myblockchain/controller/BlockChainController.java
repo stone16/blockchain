@@ -103,10 +103,10 @@ public class BlockChainController {
      */
     @RequestMapping(value = "/mine-transactions", method = RequestMethod.GET)
     @ResponseBody
-    public String mineBlock() {
+    public Block mineBlock() {
         Block block = miner.mine();
-        System.out.println(block.toString());
-        return block.toString();
+        wallet.updateUTXOsFromMinnedBlock(block);
+        return block;
     }
 
 
