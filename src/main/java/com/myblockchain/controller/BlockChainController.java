@@ -56,10 +56,10 @@ public class BlockChainController {
      * Index page
      * @return
      */
-    @ResponseBody
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome() {
-        return "Welcome to BlockChain World!";
+        return "index";
     }
 
     /**

@@ -41,7 +41,9 @@ public class Miner implements Runnable {
     }
 
     public void stopMine() {
+
         run = false;
+        Block.minable = false;
     }
 
     /**
