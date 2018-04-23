@@ -8,10 +8,9 @@
 <body>
     <div id="block">
         <p>The blance is:
-            <div th:text="${balance}"></div>
+            <div th:text="${#numbers.formatDecimal(balance,0,2)}"></div>
         </p>
     </div>
-
 
 </body>
 </html>

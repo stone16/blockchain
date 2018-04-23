@@ -27,6 +27,11 @@ div form {
     width: 450px;
     height: 350px;
     transform: translate(-50%,-50%);
+    opacity:0.7;
     background: linear-gradient(to bottom right, #41a9f4, white);
 
 }
+
+
+
+
