@@ -1,12 +1,8 @@
 package com.myblockchain.model;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
-import java.security.PublicKey;
 import java.util.*;
-
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 @Data
 public class TransactionPool {

@@ -242,20 +242,10 @@ public class P2pServer implements Runnable {
                 Socket s = ss.accept();
                 Connection c = new Connection(s, ss, pool, blockchain, wallet);
                 connections.add(c);
-                checkClient(connections);
+                connections.removeIf(Connection::isClosed);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private synchronized void checkClient(List<Connection> connections) {
-        Iterator<Connection> ConnIter = connections.iterator();
-        while (ConnIter.hasNext()) {
-            Connection c = ConnIter.next();
-            if (c.isClosed()) {
-                ConnIter.remove();
-            }
         }
     }
 }

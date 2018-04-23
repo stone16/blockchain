@@ -3,7 +3,6 @@ package com.myblockchain.model;
 import com.google.common.collect.Lists;
 import com.myblockchain.utils.BlockChainUtils;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

@@ -10,8 +10,6 @@ import com.myblockchain.services.blockchain.BlockChain;
 import com.myblockchain.services.wallet.Wallet;
 import com.myblockchain.utils.Configuration;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.ServerSocket;
