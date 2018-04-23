@@ -155,7 +155,7 @@ public class BlockChainController {
     @ResponseBody
     public RedirectView startMineBlock() {
         miner.startMine();
-        return new RedirectView("/blocks");
+        return new RedirectView("/");
     }
 
     @RequestMapping(value = "/stopmine", method = RequestMethod.GET)
@@ -163,7 +163,7 @@ public class BlockChainController {
     public RedirectView stopMineBlock() {
 
         miner.stopMine();
-        return new RedirectView("/blocks");
+        return new RedirectView("/");
     }
 
     /**

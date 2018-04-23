@@ -57,13 +57,12 @@ public class TransactionPool {
                 Transaction cur = entry.getValue();
                 if (i < num && cur.verifyTransaction()) {
                     res.add(cur);
-                    itr.remove();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return res;
+            return res;
     }
 
     /** Remove transactions that have been proved in minned block in transactions pool.

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Component
 public class Miner implements Runnable {
@@ -51,6 +53,8 @@ public class Miner implements Runnable {
             validTransaction.add(Transaction.rewardMinner(wallet, Configuration.MINING_REWARD));
             Block latestBlock = blockchain.addBlock(validTransaction);
             if (latestBlock == null) {
+                List<Block> chain = blockchain.getChain();
+                pool.updateTransactionPool(chain.get(chain.size() - 1).getTransactions());
                 continue;
             }
             p2p.broadcastChains(blockchain.getChain());
