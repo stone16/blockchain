@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Peers</title>
+    <link rel="stylesheet" type="text/css" href="css/peers.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div id="block">
+        <h1>Select your preferred IP</h1>
+        <form class="form-group" id="data-table" action="@{/makeTransact}" method="get">
+            <select id="select" class="custom-select col-9" onchange="showOptions(this)">
+                <option value="">--</option>
+                <br></br>
+                <option th:each="entry:${list}" th:value="${entry}" th:utext="${entry}" />
+            </select>
+            <br></br>
+            <input class="input-group-lg col-9" id="amount" type="text" name="amount" placeholder="input a double value">
+            <br></br>
+            <br></br>
+            <input class="btn btn-primary" type="submit" value="submit">
+        </form>
+        <a href="http://localhost:8080/blocks">
+            <button class="btn btn-primary">Goback</button>
+        </a>
+    </div>
+    <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/makeTransaction.js"></script>
+</body>
+
+</html>

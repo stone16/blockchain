@@ -1,0 +1,28 @@
+body {
+    text-align: center;
+    margin: 0;
+}
+
+#block {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    left: 50%;
+    right: 50%;
+    width: 400px;
+    height: 300px;
+    transform: translate(-50%,-50%);
+    background: linear-gradient(to bottom right, #41a9f4, white);
+
+}
+
+#block p {
+	font-family: Sans-serif;
+	font-size: 2em;
+}
+
+#block div {
+	font-family: Sans-serif;
+	font-size: 1em;
+}
