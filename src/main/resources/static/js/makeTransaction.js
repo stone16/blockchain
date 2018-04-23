@@ -45,6 +45,7 @@ $(document).ready(function(){
                         console.log("get to transact");
                     },
                     error: function(e) {
+                        alert("Not enough balance, make more money!");
                         console.log("error: ", e);
                         console.log(url);
                     }

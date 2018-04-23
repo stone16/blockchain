@@ -113,7 +113,7 @@ public class BlockChainController {
      */
     @RequestMapping(value = "/transact", method = RequestMethod.POST)
     @ResponseBody
-    public RedirectView launchTransaction(@RequestBody  String payloadString) {
+    public RedirectView launchTransaction(@RequestBody  String payloadString, HttpServletResponse response) {
 
         Map<String, Object> payload = new HashMap<String, Object>();
         try {
@@ -143,6 +143,10 @@ public class BlockChainController {
         String[] recipient = { middle.substring(1, middle.indexOf(',')),
                 middle.substring(middle.indexOf(',') + 2, middle.length() - 1)};
         Transaction newTransaction = wallet.createTransaction(recipient, amount, transactionPool);
+        if(newTransaction == null) {
+            response.setStatus(500);
+            return new RedirectView("/blocks");
+        }
         p2pServer.broadcastTransaction(newTransaction);
         return new RedirectView("/blocks");
     }
