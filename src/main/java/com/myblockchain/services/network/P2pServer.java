@@ -60,7 +60,8 @@ public class P2pServer implements Runnable {
             P2pClient client = new P2pClient(peerIp);
             clients.put(peerIp, client);
 
-            String localIp = InetAddress.getLocalHost().getHostAddress();
+            String localIp = P2pServer.getlocalAndBroadcastIP()[0];
+
             client.sendMsg(new Msg(Configuration.MessageType.REGISTRATION, localIp));
 
         } catch (IOException e) {
@@ -68,7 +69,7 @@ public class P2pServer implements Runnable {
         }
     }
 
-    private String[] getlocalAndBroadcastIP() {
+    private static String[] getlocalAndBroadcastIP() {
         String[] res = new String[2];
         try {
             Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();

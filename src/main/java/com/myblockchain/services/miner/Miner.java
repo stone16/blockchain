@@ -30,6 +30,9 @@ public class Miner implements Runnable {
     }
 
     public void startMine() {
+        if(run) {
+            return;
+        }
         run = true;
         Thread thread = new Thread(this);
         thread.start();
