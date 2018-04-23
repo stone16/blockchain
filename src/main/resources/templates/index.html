@@ -9,6 +9,17 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
+<script>
+
+    function makeAlert(){
+        alert("start mine");
+    }
+
+    function makeAlert1(){
+        alert("stop mine");
+    }
+
+</script>
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -43,11 +54,11 @@
                 <br></br>
                 <h2>Welcome to the blockchain world!</h2>
                 <hr>
-                <a href="http://localhost:8080/startmine"><button id = "bbb div-button" class="btn btn-default btn-lg"><i class="fa fa-hand-o-up" aria-hidden="true"></i>Start Mine  </button></a>
+                <a href="http://localhost:8080/startmine"><button id = "bbb div-button" class="btn btn-default btn-lg" onclick="makeAlert()"><i class="fa fa-hand-o-up" aria-hidden="true"></i>Start Mine  </button></a>
 
-                <a href="http://localhost:8080/makeTransact"><button id = "bbb div-button" class="btn btn-default btn-lg"><i class="fa fa-hand-o-up" aria-hidden="true"></i>Make Transaction  </button></a>
+                <a href="http://localhost:8080/makeTransact"><button id = "bbb div-button" class="btn btn-default btn-lg" ><i class="fa fa-hand-o-up" aria-hidden="true"></i>Make Transaction  </button></a>
 
-                <a href="http://localhost:8080/stopmine"><button id = "bbb div-button" class="btn btn-default btn-lg"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Stop Mine </button></a>
+                <a href="http://localhost:8080/stopmine"><button id = "bbb div-button" class="btn btn-default btn-lg" onclick="makeAlert1()"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Stop Mine </button></a>
             </div>
         </div>
     </div>

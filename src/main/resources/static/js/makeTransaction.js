@@ -42,6 +42,7 @@ $(document).ready(function(){
                     cache:false,
                     timeout:50000,
                     success: function(){
+                        alert("Start to do the transaction");
                         console.log("get to transact");
                     },
                     error: function(e) {
