@@ -58,11 +58,6 @@ public class Miner implements Runnable {
                 continue;
             }
             p2p.broadcastChains(blockchain.getChain());
-            try{
-                Thread.sleep(1000);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
             pool.updateTransactionPool(validTransaction);
             p2p.broadcastClearTransaction(validTransaction);
             wallet.updateUTXOsFromWholeBlockChain(blockchain);
